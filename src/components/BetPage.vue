@@ -71,7 +71,7 @@ li:active{
 </style>
 <script type="text/javascript">
 export default {
-  name: 'casino',
+  name: 'BetPage',
   data () {
     return {
       amount: 1,

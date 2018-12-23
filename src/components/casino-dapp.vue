@@ -6,7 +6,7 @@
 </template>
 <script>
 import HelloMetamask from '@/components/hello-metamask'
-import CasinoComponent from '@/components/casino-component'
+import CasinoComponent from '@/components/BetPage'
 export default {
   name: 'casino-dapp',
     beforeCreate () {
