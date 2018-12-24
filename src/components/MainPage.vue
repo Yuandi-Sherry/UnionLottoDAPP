@@ -1,12 +1,26 @@
 <template>
   <div class="body">
     <p class="words">It's just a simple UNION LOTTO DAPP.</p>
-    <a href="#BetPage" class="bet">BET</a>
+
+    <a href="#BetPage" class="bet" @click='goBetPage'>BET</a>
     <a href="#ResultPage" class="result">RESULT</a>
   </div>
 </template>
 <script>
+export default {
+  name: 'MainPage',
+  data() {
+    return {}
+  },
+  methods: {
+    goBetPage(event) {
+      this.$router.push({ path: '/bet'});
+    },
+    getWinnerNumbers(event) {
+    }
 
+  }
+}
 </script>
 <style scoped>
 .words {
