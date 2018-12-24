@@ -1,24 +1,24 @@
 <template>
   <div class="body">
     <p class="words">It's just a simple UNION LOTTO DAPP.</p>
-
     <a href="#BetPage" class="bet" @click='goBetPage'>BET</a>
-    <a href="#ResultPage" class="result">RESULT</a>
+    <!-- <a href="#ResultPage" class="result">RESULT</a> -->
   </div>
 </template>
 <script>
 export default {
   name: 'MainPage',
-  data() {
+  data () {
     return {}
   },
   methods: {
-    goBetPage(event) {
-      this.$router.push({ path: '/bet'});
+    goBetPage (event) {
+      this.$router.push({
+        path: '/bet'
+      })
     },
-    getWinnerNumbers(event) {
+    getWinnerNumbers (event) {
     }
-
   }
 }
 </script>
@@ -34,8 +34,8 @@ export default {
   width:100%;
   height:100%;
 }
-.bet:after,.bet:hover:after,.bet,.bet:hover, 
-.result:after,.result:hover:after,.result, .result:hover{
+.bet:after,.bet:hover:after,.bet,.bet:hover,
+.result:after,.result:hover:after,.result, .result:hover {
   -webkit-transition:all 1s ease;
   -moz-transition:all 1s ease;
   -o-transition:all 1s ease;
@@ -81,7 +81,6 @@ export default {
   width: 80px;
   height: 80px;
   /*color of the circle in the center*/
-  
   z-index: 999999999;
   text-align: center;
   line-height: 80px;

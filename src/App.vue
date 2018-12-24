@@ -11,4 +11,16 @@ export default {
 </script>
 
 <style>
+#app {
+  background: linear-gradient(#1F1F3E, #111133);
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: 'Montserrat'
+}
 </style>

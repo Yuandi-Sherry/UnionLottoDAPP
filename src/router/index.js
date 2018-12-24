@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import UnionLotto from '@/components/casino-dapp'
 import MainPage from '@/components/MainPage'
 import BetPage from '@/components/BetPage'
 import ResultPage from '@/components/ResultPage'

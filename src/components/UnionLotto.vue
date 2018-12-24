@@ -2,7 +2,7 @@
   <hello-metamask/>
 </template>
 <script>
-import HelloMetamask from './hello-metamask.vue'
+import HelloMetamask from './MetaMask.vue'
 export default {
   name: 'UnionLotto',
   beforeCreate () {
