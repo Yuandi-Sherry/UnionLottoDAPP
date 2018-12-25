@@ -13,9 +13,10 @@
       </div>
     </div>
     <div class="betSet">
+      <p class="warning">{{ warningMsg }}</p>
       <input v-model='amount' type='number' class="betAmount" placeholder='1' min="1">
       <button v-on:click='bet' class="betButton">Bet</button>
-      <p v-if='invalid' class="warning">{{ warningMsg }}</p>
+      
     </div>
     
    
@@ -53,15 +54,19 @@
 <style scoped>
 /*global*/
 .body {
-  position: absolute;
+  position: relative;
   color: white;
-  font-family: 'Montserrat'
+  font-family: 'Montserrat';
+  margin-left: auto;
+  margin-right: auto;
+  min-width: 700px;
+  max-width: 700px
 }
 /*ball containers*/
 .redBallPart, .blueBallPart {
   float: left;
   padding: 5px;
-  background-color: #1F1F3F;
+  background: linear-gradient(#2A2A4A, #1F1F41);
   border-radius: 10px;
   background-size: cover;
   margin: 10px;
@@ -69,6 +74,7 @@
 
 }
 /*balls*/
+
 .redBallPart {
   width: 200px;
 }
@@ -108,6 +114,7 @@
 	border-style: none;
 	border-radius: 5px;
 	font-size: 10pt;
+  outline-style: none;
 	color: white;
 	padding: 5px;
 	/*background-color: #6a5ff1;*/
@@ -127,11 +134,15 @@
   font-weight: bold;
 }
 .betSet {
-  float: left;
+  float: right;
+  text-align: center;
   position: relative;
+  min-width: 700px;
+  max-width: 700px;
+  margin: auto;
 }
 .betSet p {
-  line-height: 0pt;
+  line-height: 15pt;
 }
 </style>
 
@@ -149,7 +160,7 @@ export default {
       blueBalls: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32],
       redBalls: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
       invalid: false,
-      warningMsg: 'WARNING for debugging'
+      warningMsg: ''
     }
   },
   mounted () {
@@ -230,7 +241,7 @@ export default {
     },
     draw (event) {
       console.log('start successfully')
-      this.$store.state.contractInstance().draw({
+      this.$store.state.contractInstance().testDraw([1,2,3,4,5,6,7],{
         gas: 3000000,
         from: this.$store.state.web3.coinbase
       }, (err, result) => {
@@ -284,19 +295,6 @@ export default {
           this.pending = false
         } else {
           console.log('isAuthority')
-          console.log(JSON.stringify(result))
-        }
-      })
-      this.$store.state.contractInstance().getAuthority({
-        gas: 500000,
-        from: this.$store.state.web3.coinbase
-      },
-      (err, result) => {
-        if (err) {
-          console.log('error')
-          this.pending = false
-        } else {
-          console.log('Authority is')
           console.log(JSON.stringify(result))
         }
       })

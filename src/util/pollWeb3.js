@@ -12,8 +12,11 @@ let pollWeb3 = function (state) {
         let newCoinbase = web3.eth.coinbase
         web3.eth.getBalance(web3.eth.coinbase, function (err, newBalance) {
           if (err) {
+            console.log("err")
             console.log(err)
           } else {
+            console.log("result")
+            console.log(newCoinbase)
             store.dispatch('pollWeb3', {
               coinbase: newCoinbase,
               balance: parseInt(newBalance, 10)

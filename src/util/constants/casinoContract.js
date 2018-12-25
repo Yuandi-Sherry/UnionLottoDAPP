@@ -1,282 +1,310 @@
-const address = '0x01f560392ae4dd1c5f498a258562d223d7110e7b'
+const address = '0x4c672c0cafa9092f013ef7fcca7e94124b782a71'
 const ABI = [
   {
-    'constant': false,
-    'inputs': [
+    "constant": false,
+    "inputs": [
       {
-        'name': 'numbers',
-        'type': 'uint256[7]'
+        "name": "numbers",
+        "type": "uint256[7]"
       }
     ],
-    'name': 'bet',
-    'outputs': [],
-    'payable': true,
-    'stateMutability': 'payable',
-    'type': 'function'
+    "name": "bet",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
   },
   {
-    'constant': false,
-    'inputs': [
+    "constant": false,
+    "inputs": [],
+    "name": "computeResults",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "draw",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
       {
-        'name': 'numbers',
-        'type': 'uint256[7]'
+        "name": "results",
+        "type": "uint256[7]"
       }
     ],
-    'name': 'checkPriceLevel',
-    'outputs': [
+    "name": "testDraw",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       {
-        'name': '',
-        'type': 'uint256'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
-  },
-  {
-    'constant': false,
-    'inputs': [],
-    'name': 'computeResults',
-    'outputs': [],
-    'payable': true,
-    'stateMutability': 'payable',
-    'type': 'function'
-  },
-  {
-    'constant': false,
-    'inputs': [],
-    'name': 'draw',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
-  },
-  {
-    'constant': false,
-    'inputs': [
-      {
-        'name': 'results',
-        'type': 'uint256[7]'
-      }
-    ],
-    'name': 'testDraw',
-    'outputs': [],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function'
-  },
-  {
-    'inputs': [
-      {
-        'name': '_id',
-        'type': 'string'
+        "name": "_id",
+        "type": "string"
       },
       {
-        'name': '_date',
-        'type': 'string'
+        "name": "_date",
+        "type": "string"
       }
     ],
-    'payable': true,
-    'stateMutability': 'payable',
-    'type': 'constructor'
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "constructor"
   },
   {
-    'payable': true,
-    'stateMutability': 'payable',
-    'type': 'fallback'
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "fallback"
   },
   {
-    'constant': true,
-    'inputs': [
+    "constant": true,
+    "inputs": [
       {
-        'name': '',
-        'type': 'uint256'
+        "name": "numbers",
+        "type": "uint256[7]"
       }
     ],
-    'name': 'countResults',
-    'outputs': [
+    "name": "checkPriceLevel",
+    "outputs": [
       {
-        'name': '',
-        'type': 'uint256'
+        "name": "",
+        "type": "uint256"
       }
     ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    'constant': true,
-    'inputs': [],
-    'name': 'date',
-    'outputs': [
+    "constant": true,
+    "inputs": [
       {
-        'name': '',
-        'type': 'string'
+        "name": "",
+        "type": "uint256"
       }
     ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    "name": "countResults",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    'constant': true,
-    'inputs': [],
-    'name': 'firstPrize',
-    'outputs': [
+    "constant": true,
+    "inputs": [],
+    "name": "date",
+    "outputs": [
       {
-        'name': '',
-        'type': 'uint256'
+        "name": "",
+        "type": "string"
       }
     ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    'constant': true,
-    'inputs': [],
-    'name': 'getUsers',
-    'outputs': [
+    "constant": true,
+    "inputs": [],
+    "name": "firstPrize",
+    "outputs": [
       {
-        'name': '',
-        'type': 'address[]'
+        "name": "",
+        "type": "uint256"
       }
     ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    'constant': true,
-    'inputs': [],
-    'name': 'getWinnerNumbers',
-    'outputs': [
+    "constant": true,
+    "inputs": [],
+    "name": "getAuthority",
+    "outputs": [
       {
-        'name': '',
-        'type': 'uint256[7]'
+        "name": "",
+        "type": "address"
       }
     ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    'constant': true,
-    'inputs': [],
-    'name': 'id',
-    'outputs': [
+    "constant": true,
+    "inputs": [],
+    "name": "getResult",
+    "outputs": [
       {
-        'name': '',
-        'type': 'string'
+        "name": "",
+        "type": "uint256[]"
       }
     ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    'constant': true,
-    'inputs': [],
-    'name': 'isAuthority',
-    'outputs': [
+    "constant": true,
+    "inputs": [],
+    "name": "getUsers",
+    "outputs": [
       {
-        'name': '',
-        'type': 'bool'
+        "name": "",
+        "type": "address[]"
       }
     ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    'constant': true,
-    'inputs': [
+    "constant": true,
+    "inputs": [],
+    "name": "getWinnerNumbers",
+    "outputs": [
       {
-        'name': '',
-        'type': 'uint256'
+        "name": "",
+        "type": "uint256[7]"
       }
     ],
-    'name': 'prizeForEachLevel',
-    'outputs': [
-      {
-        'name': '',
-        'type': 'uint256'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    'constant': true,
-    'inputs': [
+    "constant": true,
+    "inputs": [],
+    "name": "id",
+    "outputs": [
       {
-        'name': 'range',
-        'type': 'uint256'
+        "name": "",
+        "type": "string"
       }
     ],
-    'name': 'rand',
-    'outputs': [
-      {
-        'name': '',
-        'type': 'uint256'
-      }
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    'constant': true,
-    'inputs': [],
-    'name': 'secondPrize',
-    'outputs': [
+    "constant": true,
+    "inputs": [],
+    "name": "isAuthority",
+    "outputs": [
       {
-        'name': '',
-        'type': 'uint256'
+        "name": "",
+        "type": "bool"
       }
     ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    'constant': true,
-    'inputs': [
+    "constant": true,
+    "inputs": [
       {
-        'name': '',
-        'type': 'uint256'
+        "name": "",
+        "type": "uint256"
       }
     ],
-    'name': 'users',
-    'outputs': [
+    "name": "prizeForEachLevel",
+    "outputs": [
       {
-        'name': '',
-        'type': 'address'
+        "name": "",
+        "type": "uint256"
       }
     ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    'constant': true,
-    'inputs': [
+    "constant": true,
+    "inputs": [
       {
-        'name': '',
-        'type': 'uint256'
+        "name": "range",
+        "type": "uint256"
       }
     ],
-    'name': 'winnerNumbers',
-    'outputs': [
+    "name": "rand",
+    "outputs": [
       {
-        'name': '',
-        'type': 'uint256'
+        "name": "",
+        "type": "uint256"
       }
     ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function'
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "secondPrize",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "users",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "winnerNumbers",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
   }
 ]
 export {address, ABI}

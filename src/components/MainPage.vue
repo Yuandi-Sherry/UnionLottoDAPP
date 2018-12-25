@@ -2,14 +2,17 @@
   <div class="body">
     <p class="words">It's just a simple UNION LOTTO DAPP.</p>
     <a href="#BetPage" class="bet" @click='goBetPage'>BET</a>
-    <!-- <a href="#ResultPage" class="result">RESULT</a> -->
+    <a href="#ResultPage" class="result" @click="goResultPage">RESULT</a>
   </div>
 </template>
 <script>
+import HelloMetamask from '@/components/MetaMask'
 export default {
   name: 'MainPage',
   data () {
-    return {}
+    return {
+      valid: false
+    }
   },
   methods: {
     goBetPage (event) {
@@ -17,8 +20,18 @@ export default {
         path: '/bet'
       })
     },
-    getWinnerNumbers (event) {
+    goResultPage (event) {
+      this.$router.push({
+        path: '/result'
+      })
     }
+  },
+  beforeCreate () {
+    console.log('registerWeb3 Action dispatched from casino-dapp.vue')
+    this.$store.dispatch('registerWeb3')
+  },
+  components: {
+    'hello-metamask': HelloMetamask
   }
 }
 </script>
@@ -27,12 +40,6 @@ export default {
   color: white;
 }
 .body{
-  background:#000000;
-  position:absolute;
-  margin: 0;
-  padding: 0;
-  width:100%;
-  height:100%;
 }
 .bet:after,.bet:hover:after,.bet,.bet:hover,
 .result:after,.result:hover:after,.result, .result:hover {
@@ -56,9 +63,9 @@ export default {
   -webkit-border-radius: 100%;
   -moz-border-radius: 100%;
   border-radius: 100%;
-  -webkit-box-shadow: 0 0 15px 2px #000;
-  -moz-box-shadow: 0 0 15px 2px #000;
-  box-shadow: 0 0 15px 2px #000;
+  -webkit-box-shadow: 0 0 15px 2px #111133;
+  -moz-box-shadow: 0 0 15px 2px #111133;
+  box-shadow: 0 0 15px 2px #111133;
 }
 
 .result {
@@ -89,9 +96,9 @@ export default {
   -webkit-border-radius: 100%;
   -moz-border-radius: 100%;
   border-radius: 100%;
-  -webkit-box-shadow: 0 0 15px 2px #000;
-  -moz-box-shadow: 0 0 15px 2px #000;
-  box-shadow: 0 0 15px 2px #000;
+  -webkit-box-shadow: 0 0 15px 2px #111133;
+  -moz-box-shadow: 0 0 15px 2px #111133;
+  box-shadow: 0 0 15px 2px #111133;
 }
 .bet:after {
   background-color: #3FB4BE;

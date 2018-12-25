@@ -1,5 +1,6 @@
 <template>
  <div class="body">
+  <p v-if="!web3.isInjected">Please log in Metamask at first</p>
   <div>
     <p class="title">Metamask:</p>
     <p class="content"> {{ web3.isInjected }}</p>
@@ -31,18 +32,23 @@ export default {
 <style scoped>
 .body {
   color: white;
-  height: 100%;
+  height: 100px;
   width:100%;
   position: relative;
   z-index: 1;
+  min-width: 1000px;
+  max-width: 1000px;
+  margin: 10px auto;
 }
 .body div{
-  padding: 10px;
+  padding: 5px;
   height: auto;
-  margin: 1%;
-  border-radius: 10px;
+  margin: 5px;
+  border-radius: 10px;;
   display: inline-block;
   background-color: #2A2A4A;
+  word-wrap: break-word;
+  vertical-align:top;
 }
 .body div p {
   line-height: 1pt;
@@ -55,5 +61,6 @@ export default {
   font-size: 15pt;
   color: #CF8143
 }
+
 
 </style>
