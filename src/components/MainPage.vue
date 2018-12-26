@@ -1,8 +1,12 @@
 <template>
   <div class="body">
     <p class="words">It's just a simple UNION LOTTO DAPP.</p>
-    <a href="#BetPage" class="bet" @click='goBetPage'>BET</a>
-    <a href="#ResultPage" class="result" @click="goResultPage">RESULT</a>
+    <div :class="{'display': !getMetaMaskState, 'nodisplay': getMetaMaskState}">Notice that you haven't logged in Metamask, please log in at first!</div>
+    <div class="buttons">
+      <div class="bet" @click='goBetPage'>BET</div>
+      <div class="result" @click="goResultPage">RESULT</div>
+    </div>
+    
   </div>
 </template>
 <script>
@@ -26,7 +30,17 @@ export default {
       })
     }
   },
-  beforeCreate () {
+  computed: {
+    getMetaMaskState() {
+      console.log('computed')
+      try {
+        return this.$store.state.web3.isInjected
+      } catch(e) {
+        return false
+      } 
+    }
+  }, 
+  created () {
     console.log('registerWeb3 Action dispatched from casino-dapp.vue')
     this.$store.dispatch('registerWeb3')
   },
@@ -36,10 +50,35 @@ export default {
 }
 </script>
 <style scoped>
+.display, .nodisplay{
+  margin-left: auto;
+  margin-right: auto;
+  min-width: 700px;
+  text-align: center;
+}
+.display {
+  visibility: visible;
+}
+.nodisplay{
+  visibility: hidden;
+}
+
 .words {
-  color: white;
+  margin: auto;
+  margin-top: 200px;
+  min-width: 700px;
+  min-height: 200px;
+  max-height: 200px;
+  text-align: center;
+  font-size: 24pt;
 }
 .body{
+  color: white;
+}
+.buttons {
+  color: white;
+  min-width: 700px;
+  text-align: center;
 }
 .bet:after,.bet:hover:after,.bet,.bet:hover,
 .result:after,.result:hover:after,.result, .result:hover {
@@ -119,7 +158,6 @@ export default {
   box-shadow:0 0 4px 4px #FF7F50;
 }
 .bet:hover:after, .result:hover:after{
-  background-color: #2A2A2B;
-  background-color: rgba(17, 17, 17, 0.67);
+  opacity: 0.0
 }
 </style>

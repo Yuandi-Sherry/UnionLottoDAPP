@@ -14,6 +14,7 @@ export default {
 #app {
   background: linear-gradient(#1F1F3E, #111133);
   position: absolute;
+  background-repeat: repeat;
   top: 0px;
   left: 0px;
   height: 100%;

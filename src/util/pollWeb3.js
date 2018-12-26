@@ -10,19 +10,24 @@ let pollWeb3 = function (state) {
     if (web3 && store.state.web3.web3Instance) {
       if (web3.eth.coinbase !== store.state.web3.coinbase) {
         let newCoinbase = web3.eth.coinbase
-        web3.eth.getBalance(web3.eth.coinbase, function (err, newBalance) {
-          if (err) {
-            console.log("err")
-            console.log(err)
-          } else {
-            console.log("result")
-            console.log(newCoinbase)
-            store.dispatch('pollWeb3', {
-              coinbase: newCoinbase,
-              balance: parseInt(newBalance, 10)
-            })
-          }
-        })
+        try {
+          web3.eth.getBalance(web3.eth.coinbase, function (err, newBalance) {
+            if (err) {
+              console.log("err")
+              console.log(err)
+            } else {
+              console.log("result")
+              console.log(newCoinbase)
+              store.dispatch('pollWeb3', {
+                coinbase: newCoinbase,
+                balance: parseInt(newBalance, 10)
+              })
+            }
+          })
+        } catch(e) {
+          console.log(e)
+        }
+        
       } else {
         web3.eth.getBalance(store.state.web3.coinbase, (err, polledBalance) => {
           if (err) {

@@ -41,17 +41,24 @@ export default {
   margin: 10px auto;
 }
 .body div{
-  padding: 5px;
+  text-align: left;
+  padding-right: 15px;
+  padding-left: 15px;
   height: auto;
   margin: 5px;
-  border-radius: 10px;;
+  border-radius: 5px;
   display: inline-block;
-  background-color: #2A2A4A;
-  word-wrap: break-word;
+  background: linear-gradient(#272748, #2A2A4A);
   vertical-align:top;
+  min-width: 100px;
+  max-width: 300px;
+  height: 80px;
+  padding-bottom: 15px;
 }
 .body div p {
-  line-height: 1pt;
+  word-wrap: break-word;
+  
+  /*line-height: 15pt;*/
 }
 .title {
   font-size: 10pt;
@@ -59,7 +66,9 @@ export default {
 }
 .content {
   font-size: 15pt;
-  color: #CF8143
+  color: #CF8143;
+  vertical-align: center;
+  margin-top: -10px;
 }
 
 

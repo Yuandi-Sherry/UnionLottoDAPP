@@ -1,7 +1,7 @@
 import Web3 from 'web3'
 import {address, ABI} from './constants/casinoContract'
-// const fs = require("fs")
-// const solc = require('solc')
+const fs = require("fs")
+// let solc = require("solc")
 // 这一步会出问题
 // CONTRACT_FILE = '../../../UnionLotto.sol'
 

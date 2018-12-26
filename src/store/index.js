@@ -25,7 +25,7 @@ export const store = new Vuex.Store({
       // console.log('pollWeb3Instance mutation being executed', payload)
       state.web3.coinbase = payload.coinbase
       // console.debug(parseInt(payload.balance, 10))
-      // state.web3.balance = parseInt(payload.balance, 10)
+      state.web3.balance = parseInt(payload.balance, 10)
     },
     registerContractInstance (state, payload) {
       console.log('Union Lotto contract instance: ', payload)
