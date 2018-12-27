@@ -101,11 +101,8 @@ export const store = new Vuex.Store({
             console.log('finish executing function [createUnionLotto]')
             console.log("-------debug1------ " + payload.name)
             commit('registerUnionLotto', {name: payload.name, contract: result})
-            // state.unionLottoName = payload.name
           }
         })      
-      }).then(result => {
-          console.log("then!!!!!!!!!!!!!!")
       }).catch(e => console.log(e))
     },
     getUnionLotto({commit}, payload) {
@@ -147,6 +144,7 @@ export const store = new Vuex.Store({
     changeRecordPage({commit}, payload) {
       return new Promise(function (resolve, reject) {
         commit('setRecordPageName', payload)
+        resolve()
       })
     }
   }
