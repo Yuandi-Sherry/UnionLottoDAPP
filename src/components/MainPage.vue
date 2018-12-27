@@ -6,6 +6,7 @@
       <div class="bet" @click='goBetPage'>BET</div>
       <div class="result" @click="goResultPage">RESULT</div>
     </div>
+    <input type="date" v-model="date">
     <button @click="testPublish">test publish </button>
     <button @click="test">test </button>
   </div>
@@ -16,7 +17,8 @@ export default {
   name: 'MainPage',
   data () {
     return {
-      valid: false
+      valid: false,
+      date: null
     }
   },
   methods: {
@@ -31,7 +33,8 @@ export default {
       })
     },
     testPublish(event) {
-      this.$store.dispatch('publishUnionLotto', {name: this.$store.state.unionLottoName, date: "1", address: '0x4c02d8d6cf951e636642a21f43bbb46c7fbf9342'})
+      console.log(this.date)
+      this.$store.dispatch('publishUnionLotto', {name: this.date, date: "1", address: '0x4c02d8d6cf951e636642a21f43bbb46c7fbf9342'})
     },
     test(event) {
       // console.log(this.$store.state.web3.coinbase)

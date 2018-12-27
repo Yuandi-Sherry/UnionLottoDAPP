@@ -36,7 +36,8 @@ export const store = new Vuex.Store({
     },
     // 发布一个彩票
     registerUnionLotto(state, payload) {
-      console.log('Union Lotto contract instance: ', payload)
+      state.unionLottoName = payload.name
+      console.log('Union Lotto contract instance: ', payload.contract)
       // state.unionLottos.push(payload)
 
     },
@@ -78,28 +79,11 @@ export const store = new Vuex.Store({
             console.log(registerUnionLotto)
           } else {
             console.log('finish executing function [createUnionLotto]')
-            state.SeniorAuthority().test(payload.name, {
-              gas: 300000,
-              from: state.web3.coinbase
-            }, (err, result) => {
-              if (err) {
-                console.log('error in betting')
-                console.log(registerUnionLotto)
-              } else {
-                console.log('finish executing function [test]')
-                console.log(result)
-                
-                // UnionLottoAddress = result
-                // let web3 = new Web3(window.web3.currentProvider)
-                // let unionLotto = web3.eth.contract(ABI)
-                // let unionLottoInstance = unionLotto.at(UnionLottoAddress)
-                // resolve(unionLottoInstance)
-              }
-            })    
+            // state.unionLottoName = payload.name
           }
         })      
       }).then(result => {
-          // commit('registerUnionLotto', result)
+          commit('registerUnionLotto', {name: payload.name, contract: result})
       }).catch(e => console.log(e))
     },
     getUnionLotto({commit}, payload) {
