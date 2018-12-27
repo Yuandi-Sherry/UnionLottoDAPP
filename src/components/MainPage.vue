@@ -38,7 +38,7 @@ export default {
     },
     test(event) {
       // console.log(this.$store.state.web3.coinbase)
-      this.$store.state.SeniorAuthority().test(this.$store.state.unionLottoName,{
+      this.$store.state.SeniorAuthority().test(this.date,{
           gas: 300000,
           from: this.$store.state.web3.coinbase
         }, (err, result) => {

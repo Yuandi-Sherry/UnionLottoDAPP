@@ -37,6 +37,7 @@ export const store = new Vuex.Store({
     // 发布一个彩票
     registerUnionLotto(state, payload) {
       state.unionLottoName = payload.name
+      state.recordPageName = payload.name
       console.log('Union Lotto contract instance: ', payload.contract)
       // state.unionLottos.push(payload)
 
@@ -44,6 +45,10 @@ export const store = new Vuex.Store({
     setCurrentLotto(state, payload) {
       console.log('mutations 当前彩票为: ', payload)
       state.currentUnionLotto = () => payload
+    },
+    changeRecordPage(state, payload) {
+      console.log("change record page to " + payload)
+      state.recordPageName = payload
     }
   },
   actions: {
@@ -119,7 +124,11 @@ export const store = new Vuex.Store({
           })
         })     
       }
-       
+    },
+    changeRecordPage({commit}, payload) {
+      return new Promise(function (resolve, reject) {
+        commit('changeRecordPage', payload)
+      })
     }
   }
 })

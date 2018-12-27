@@ -6,9 +6,11 @@
         <p>{{ announcedMsg}}</p>
         <div class=red>{{ winningRed }}</div>
         <div class="blue" v-for="blue in winningBlues">
-          <div>{{ blue }}</div>
-   
+          <div >{{ blue }}</div>
       </div>
+    </div>
+    <div class="allLottos" v-for="lottos in allUnionLottos">
+     <button @click="changeLottos">{{ lottos }}</button>
     </div>
     <br>
     <table v-if="hasBet">
@@ -32,6 +34,7 @@
 </template>
 <script>
 export default {
+  inject: ['reload'],
   name: 'RecordPart',
   data() {
   	return {
@@ -41,12 +44,20 @@ export default {
       winningBlues:[],
       pending: true,
       displayResult: true,
-      announcedMsg: ""
+      announcedMsg: "",
+      allUnionLottos: []
   	}
+  },
+  computed: {
+    getWinningRed () {
+      return this.winningRed
+    }
+
   },
   mounted() {
   	console.log('dispatching getUnionLotto')
-    this.$store.dispatch('getUnionLotto', {name: this.$store.state.unionLottoName}).then(response=> {
+    this.$store.dispatch('getUnionLotto', {name: this.$store.state.recordPageName}).then(response=> {
+      // 获得此人投注本期彩票的所有记录
       this.$store.state.currentUnionLotto().getResult({
         gas: 300000,
         from: this.$store.state.web3.coinbase
@@ -109,6 +120,7 @@ export default {
           }
         }
       })
+      // 获得开奖结果
       this.$store.state.currentUnionLotto().getWinnerNumbers({
         gas: 300000,
         from: this.$store.state.web3.coinbase
@@ -136,8 +148,20 @@ export default {
             this.announcedMsg = "The result of thie lottery is: "
             this.hasResult = true
           }
-          
-          
+        }
+      })
+      // 获得目前为止的所有彩票
+      this.$store.state.SeniorAuthority().getLottos({
+        gas: 300000,
+        from: this.$store.state.web3.coinbase
+      }, (err, result) => {
+        if(err) {
+          console.log(err)
+        } else {
+          console.log(result)
+          for(var i = 0; i < result.length; i++) {
+            this.allUnionLottos.push(result[i])
+          }
         }
       })
     }).catch(response=>{ 
@@ -180,6 +204,17 @@ export default {
           
         }
       })
+    },
+    changeLottos(event) {
+      console.log("click recordPageName")
+      this.$store.dispatch('changeRecordPage', event.target.innerHTML).then(response=> {
+        console.log(this.$store.state.recordPageName)
+        this.reload()
+      })
+      this.winningRed = 0
+      console.log("this.reload")
+      // this.$router.go(0)
+      // console.log(this.$store.state.recordPageName)
     }
   }
 }

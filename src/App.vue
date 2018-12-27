@@ -6,7 +6,26 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  provide() {
+    return {
+      reload:this.reload
+    }
+  },
+  data () {
+    return {
+      isRouterAlive: true
+    }
+  },
+  methods: {
+    reload() {
+      this.isRouterAlive = false
+      console.log('reloading')
+      this.$nextTick(function () {
+        this.isRouterAlive = true
+      })
+    }
+  }
 }
 </script>
 

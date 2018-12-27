@@ -1,5 +1,6 @@
 <template>
   <div class='body'>
+    <p>{{LottoName}}</p>
     <div class="redBallPart">
       <p>Choose 1 red ball</p>
       <div :key="ball" v-for="ball in redBalls">
@@ -157,10 +158,12 @@ export default {
       redBalls: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
       invalid: false,
       warningMsg: '',
-      authority: true
+      authority: true,
+      LottoName: null
     }
   },
   mounted () {
+    this.LottoName = this.$store.state.unionLottoName
     console.log('dispatching setCurrentUnionLotto')
     console.log(this.$store.state.SeniorAuthority)
     this.$store.dispatch('getUnionLotto', {name:this.$store.state.unionLottoName,}).then(response=>{

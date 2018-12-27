@@ -1,7 +1,7 @@
 <template>
   <div>
     <hello-metamask/>
-    <casino-component/>
+    <LotteryPart/>
     <img @click="back" class="button"  src="../assets/backButton.png">back</img>
   </div>
 </template>
@@ -12,7 +12,7 @@ export default {
   name: 'casino-dapp',
   components: {
     'hello-metamask': HelloMetamask,
-    'casino-component': LotteryPart
+    'LotteryPart': LotteryPart
   },
   methods: {
     back (event) {
