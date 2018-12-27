@@ -22,6 +22,7 @@
     <button @click="getUsers">get users</button>
     
     <button @click="getResult">get Result</button>
+    <button @click="test">test</button>
   </div>
 </template>
 
@@ -317,13 +318,13 @@ export default {
       })
     },
     getResult(event) {
-      this.$store.state.currentUnionLotto().test({
-        gas: 300000,
+      this.$store.state.currentUnionLotto().getResult({
+        gas: 3000000,
         from: this.$store.state.web3.coinbase
       }, (err, result) => {
         if (err) {
-          // console.log('error in getResult')
-          // console.log(err)
+          console.log('error in getResult')
+          console.log(err)
           this.pending = false
         } else {
           // 获得账户投注的所有彩票
@@ -377,6 +378,23 @@ export default {
               })
             })(this.bets, result, this.$store.state.currentUnionLotto(),this.$store.state.web3.coinbase, tempNumbers, i, this.pending);
           }
+        }
+      })
+    },
+    test(event) {
+      this.$store.state.currentUnionLotto().test({
+        gas: 3000000,
+        from: this.$store.state.web3.coinbase
+      }, (err, result) => {
+        if (err) {
+          console.log('error in getResult')
+          console.log(err)
+          this.pending = false
+        } else {
+          // 获得账户投注的所有彩票
+          console.log('获得账户投注的所有彩票')
+          console.log(result)
+         
         }
       })
     }
