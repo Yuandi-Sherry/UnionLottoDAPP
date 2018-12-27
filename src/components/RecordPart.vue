@@ -26,7 +26,7 @@
           <td v-if="displayResult">{{ bet.level }}</td>
       </tr>
     </table>
-    	
+    <button @click="getWinnerNumbers">getWinnernumbers</button>
   </div>
   
 </template>
@@ -116,6 +116,7 @@ export default {
         if(err) {
           console.log(err)
         } else {
+          console.log(result)
           if(JSON.stringify(result) == '["0","0","0","0","0","0","0"]') {
             console.log("haven't drawn")
             this.winningRed = JSON.stringify(result).slice(1,-1).split(',')[0].slice(1,-1)
@@ -147,6 +148,39 @@ export default {
     test (event) {
       console.log(this.winningBlues.indexOf(event.target.innerHTML))
     },
+    getWinnerNumbers(event) {
+      this.$store.state.currentUnionLotto().getWinnerNumbers({
+        gas: 300000,
+        from: this.$store.state.web3.coinbase
+      }, (err, result) => {
+        if(err) {
+          console.log(err)
+        } else {
+          console.log(result)
+          if(JSON.stringify(result) == '["0","0","0","0","0","0","0"]') {
+            console.log("haven't drawn")
+            this.winningRed = JSON.stringify(result).slice(1,-1).split(',')[0].slice(1,-1)
+            for(var i = 1; i < 7; i++) {
+              this.winningBlues.push(JSON.stringify(result).slice(1,-1).split(',')[i].slice(1,-1))
+            }
+            this.announcedMsg = "This lottery haven't been annouced yet."
+            this.winningRed = "?"
+            this.winningBlues = ["?", "?", "?", "?", "?", "?"]
+            this.hasResult = true
+          } else {
+            this.winningBlues = []
+            this.winningRed = JSON.stringify(result).slice(1,-1).split(',')[0].slice(1,-1)
+            for(var i = 1; i < 7; i++) {
+              this.winningBlues.push(JSON.stringify(result).slice(1,-1).split(',')[i].slice(1,-1))
+            }
+            this.announcedMsg = "The result of thie lottery is: "
+            this.hasResult = true
+          }
+          
+          
+        }
+      })
+    }
   }
 }
 

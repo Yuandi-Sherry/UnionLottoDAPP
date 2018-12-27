@@ -157,7 +157,7 @@ export default {
       redBalls: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
       invalid: false,
       warningMsg: '',
-      authority: false
+      authority: true
     }
   },
   mounted () {
@@ -178,7 +178,9 @@ export default {
             console.log(err)
             this.pending = false
           } else {
-            this.authority = JSON.stringify(result) == "false" ? false : true
+            // this.authority = JSON.stringify(result) == "false" ? false : true
+            // console.log("isAuthority")
+            // console.log(this.authority )
           }
         })
     })
@@ -259,7 +261,7 @@ export default {
     },
     draw (event) {
       console.log('start successfully')
-      this.$store.state.currentUnionLotto().testDraw([1,2,3,4,5,6,7],{
+      this.$store.state.currentUnionLotto().draw({
         gas: 3000000,
         from: this.$store.state.web3.coinbase
       }, (err, result) => {
@@ -318,8 +320,10 @@ export default {
       })
     },
     getResult(event) {
+      console.log("当前账户为")
+      console.log(this.$store.state.web3.coinbase)
       this.$store.state.currentUnionLotto().getResult({
-        gas: 3000000,
+        gas: 3000000000000000000,
         from: this.$store.state.web3.coinbase
       }, (err, result) => {
         if (err) {
@@ -392,8 +396,8 @@ export default {
           this.pending = false
         } else {
           // 获得账户投注的所有彩票
-          console.log('获得账户投注的所有彩票')
-          console.log(result)
+          console.log('获得账户投注的所有彩票总数')
+          console.log( JSON.stringify(result))
          
         }
       })

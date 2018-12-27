@@ -18,8 +18,8 @@ const ABI = [
     "inputs": [],
     "name": "draw",
     "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
+    "payable": true,
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -295,8 +295,8 @@ const ABI = [
     ],
     "name": "testDraw",
     "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
+    "payable": true,
+    "stateMutability": "payable",
     "type": "function"
   },
   {

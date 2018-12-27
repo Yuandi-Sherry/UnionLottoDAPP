@@ -10,6 +10,6 @@ let state = {
   SeniorAuthority: null,
   unionLottos: [],
   currentUnionLotto: null,
-  unionLottoName: 'name5'
+  unionLottoName: 'name1'
 }
 export default state
