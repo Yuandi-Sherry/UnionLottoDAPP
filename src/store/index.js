@@ -36,19 +36,22 @@ export const store = new Vuex.Store({
     },
     // 发布一个彩票
     registerUnionLotto(state, payload) {
+      console.log('------debug4--------- ' + payload.name)
       state.unionLottoName = payload.name
       state.recordPageName = payload.name
       console.log('Union Lotto contract instance: ', payload.contract)
-      // state.unionLottos.push(payload)
-
     },
     setCurrentLotto(state, payload) {
       console.log('mutations 当前彩票为: ', payload)
       state.currentUnionLotto = () => payload
     },
-    changeRecordPage(state, payload) {
-      console.log("change record page to " + payload)
+    setRecordPageName(state, payload) {
       state.recordPageName = payload
+      console.log("current recordPageName: " + state.recordPageName)
+    },
+    setUnionName(state, payload) {
+      state.unionLottoName = payload
+      console.log("current unionLottoName: " + state.unionLottoName)
     }
   },
   actions: {
@@ -68,6 +71,18 @@ export const store = new Vuex.Store({
     getSeniorAuthority ({commit}) {
       getSeniorAuthority.then(result => {
         commit('registerSeniorAuthority', result)
+        state.SeniorAuthority().getLottos({
+          from: state.web3.coinbase,
+          gas: 3000000
+        }, (err, result) => {
+          console.log("in index.js registerSeniorAuthority")
+          console.log(result)
+          if(state.unionLottoName === '')
+            commit('setUnionName', result[1])
+          if(state.recordPageName === '')
+            commit('setRecordPageName', result[1])
+        })
+        // state.
       }).catch(e => console.log(e))
     },
     publishUnionLotto ({commit}, payload) {
@@ -84,14 +99,19 @@ export const store = new Vuex.Store({
             console.log(registerUnionLotto)
           } else {
             console.log('finish executing function [createUnionLotto]')
+            console.log("-------debug1------ " + payload.name)
+            commit('registerUnionLotto', {name: payload.name, contract: result})
             // state.unionLottoName = payload.name
           }
         })      
       }).then(result => {
-          commit('registerUnionLotto', {name: payload.name, contract: result})
+          console.log("then!!!!!!!!!!!!!!")
       }).catch(e => console.log(e))
     },
     getUnionLotto({commit}, payload) {
+      console.log("-------debug2------ " + payload.name)
+      console.log(state.recordPageName)
+      console.log(state.unionLottoName)
       if(state.SeniorAuthority == null) {
         console.log('权威机构未指定')
         console.log(state.SeniorAuthority)
@@ -101,10 +121,6 @@ export const store = new Vuex.Store({
         console.log(state.SeniorAuthority())
         return new Promise(function (resolve, reject) {
           console.log(' 设置当前的彩票')
-          // commit('setCurrentLotto', state.unionLottos[0])
-          // console.log(payload.name)
-          // console.log('state.currentUnionLotto')
-          // console.log(state.currentUnionLotto)
           state.SeniorAuthority().test(payload.name, {
             gas: 300000,
             from: state.web3.coinbase
@@ -113,6 +129,7 @@ export const store = new Vuex.Store({
               console.log('error in getUnionLotto')
             } else {
               console.log('获得当前的Union Lotto地址')
+              console.log(payload.name)
               console.log(JSON.stringify(result))
               var UnionLottoAddress = result
               let web3 = new Web3(window.web3.currentProvider)
@@ -122,12 +139,14 @@ export const store = new Vuex.Store({
               commit('setCurrentLotto', unionLottoInstance)
             }
           })
-        })     
+        }).catch(e => {
+          console.log("catch in getUnionLotto Promise")
+        })
       }
     },
     changeRecordPage({commit}, payload) {
       return new Promise(function (resolve, reject) {
-        commit('changeRecordPage', payload)
+        commit('setRecordPageName', payload)
       })
     }
   }

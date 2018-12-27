@@ -1,4 +1,4 @@
-const address = '0xaac533fe8a7f6b292474504edcb86d3f80ef2bf3'
+const address = '0xcc77375cd1dcc6ea4d4a5c82c70dd767c7a15387'
 const ABI = [
   {
     "constant": false,
@@ -17,12 +17,6 @@ const ABI = [
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
-  },
-  {
-    "inputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "constructor"
   },
   {
     "constant": true,

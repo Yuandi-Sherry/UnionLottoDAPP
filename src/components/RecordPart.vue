@@ -55,7 +55,7 @@ export default {
 
   },
   mounted() {
-  	console.log('dispatching getUnionLotto')
+  	console.log('------debug3--------- ' + this.$store.state.recordPageName)
     this.$store.dispatch('getUnionLotto', {name: this.$store.state.recordPageName}).then(response=> {
       // 获得此人投注本期彩票的所有记录
       this.$store.state.currentUnionLotto().getResult({
@@ -158,6 +158,7 @@ export default {
         if(err) {
           console.log(err)
         } else {
+          console.log('获得目前为止的所有彩票')
           console.log(result)
           for(var i = 0; i < result.length; i++) {
             this.allUnionLottos.push(result[i])
@@ -209,10 +210,10 @@ export default {
       console.log("click recordPageName")
       this.$store.dispatch('changeRecordPage', event.target.innerHTML).then(response=> {
         console.log(this.$store.state.recordPageName)
-        this.reload()
+        // this.reload()
       })
-      this.winningRed = 0
-      console.log("this.reload")
+      // this.winningRed = 0
+      // console.log("this.reload")
       // this.$router.go(0)
       // console.log(this.$store.state.recordPageName)
     }
