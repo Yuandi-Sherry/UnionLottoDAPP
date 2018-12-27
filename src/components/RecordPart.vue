@@ -24,7 +24,6 @@
           <td><div :class="{blue: winningBlues.indexOf(blue+'')!= -1, ball: winningBlues.indexOf(blue + '') === -1}" v-for="blue in bet.blues" @click="test">{{ blue }}</div></td>
           <td>{{ bet.count }}</td>
           <td v-if="displayResult">{{ bet.level }}</td>
-        <!-- </tbody> -->
       </tr>
     </table>
     	
@@ -46,9 +45,9 @@ export default {
   	}
   },
   mounted() {
-  	console.log('dispatching getContractInstance')
-    this.$store.dispatch('getContractInstance').then(response=> {
-      this.$store.state.contractInstance().getResult({
+  	console.log('dispatching getUnionLotto')
+    this.$store.dispatch('getUnionLotto', {name: this.$store.state.unionLottoName}).then(response=> {
+      this.$store.state.currentUnionLotto().getResult({
         gas: 300000,
         from: this.$store.state.web3.coinbase
       }, (err, result) => {
@@ -58,8 +57,8 @@ export default {
           this.pending = false
         } else {
           // 获得账户投注的所有彩票
-          // console.log('result in getResult')
-          // console.log(result)
+          console.log('获得账户投注的所有彩票')
+          console.log(result)
           // console.log(JSON.getJSONArray(result))
           var temp = JSON.stringify(result).slice(1,-1).split(',')
           // console.log(temp)
@@ -106,11 +105,11 @@ export default {
                   })
                 }
               })
-            })(this.bets, result, this.$store.state.contractInstance(),this.$store.state.web3.coinbase, tempNumbers, i, this.pending);
+            })(this.bets, result, this.$store.state.currentUnionLotto(),this.$store.state.web3.coinbase, tempNumbers, i, this.pending);
           }
         }
       })
-      this.$store.state.contractInstance().getWinnerNumbers({
+      this.$store.state.currentUnionLotto().getWinnerNumbers({
         gas: 300000,
         from: this.$store.state.web3.coinbase
       }, (err, result) => {

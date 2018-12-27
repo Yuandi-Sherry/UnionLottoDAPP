@@ -7,6 +7,9 @@ let state = {
     balance: null,
     error: null
   },
-  contractInstance: null
+  SeniorAuthority: null,
+  unionLottos: [],
+  currentUnionLotto: null,
+  unionLottoName: 'name4'
 }
 export default state

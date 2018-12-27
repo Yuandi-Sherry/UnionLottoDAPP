@@ -19,6 +19,9 @@
       <button  v-if="authority" v-on:click='draw' class="drawButton">Draw</button>
     </div>
     <loadingPart v-if='pending'></loadingPart>
+    <button @click="getUsers">get users</button>
+    
+    <button @click="getResult">get Result</button>
   </div>
 </template>
 
@@ -157,9 +160,11 @@ export default {
     }
   },
   mounted () {
-    console.log('dispatching getContractInstance')
-    this.$store.dispatch('getContractInstance').then(response=>{
-      this.$store.state.contractInstance().isAuthority({
+    console.log('dispatching setCurrentUnionLotto')
+    console.log(this.$store.state.SeniorAuthority)
+    this.$store.dispatch('getUnionLotto', {name:this.$store.state.unionLottoName,}).then(response=>{
+      console.log(this.$store.state.currentUnionLotto())
+      this.$store.state.currentUnionLotto().isAuthority({
           gas: 300000,
           from: this.$store.state.web3.coinbase
         }, (err, result) => {
@@ -230,7 +235,7 @@ export default {
           betNumbers.push(this.selectedBlueBalls[i])
         }
         console.log(betNumbers)
-        this.$store.state.contractInstance().bet(betNumbers, {
+        this.$store.state.currentUnionLotto().bet(betNumbers, {
           gas: 300000,
           from: this.$store.state.web3.coinbase,
           value: this.$store.state.web3.web3Instance().toWei(this.amount * 2, 'ether')
@@ -244,17 +249,16 @@ export default {
             console.log(err)
             this.pending = false
           } else {
-            console.log('bet successfully')
+            console.log('在下述地址投注彩票')
+            console.log(this.$store.state.currentUnionLotto())
             this.pending = false
           }
         })
-      }
-
-      
+      }      
     },
     draw (event) {
       console.log('start successfully')
-      this.$store.state.contractInstance().testDraw([1,2,3,4,5,6,7],{
+      this.$store.state.currentUnionLotto().testDraw([1,2,3,4,5,6,7],{
         gas: 3000000,
         from: this.$store.state.web3.coinbase
       }, (err, result) => {
@@ -268,7 +272,7 @@ export default {
       })
     },
     getUsers (event) {
-      this.$store.state.contractInstance().getUsers({
+      this.$store.state.currentUnionLotto().getUsers({
         gas: 500000,
         from: this.$store.state.web3.coinbase
       },
@@ -283,7 +287,7 @@ export default {
       })
     },
     getWinnerNumbers (event) {
-      this.$store.state.contractInstance().getWinnerNumbers({
+      this.$store.state.currentUnionLotto().getWinnerNumbers({
         gas: 500000,
         from: this.$store.state.web3.coinbase
       },
@@ -298,7 +302,7 @@ export default {
       })
     },
     isAuthority (event) {
-      this.$store.state.contractInstance().isAuthority({
+      this.$store.state.currentUnionLotto().isAuthority({
         gas: 500000,
         from: this.$store.state.web3.coinbase
       },
@@ -309,6 +313,70 @@ export default {
         } else {
           console.log('isAuthority')
           console.log(JSON.stringify(result))
+        }
+      })
+    },
+    getResult(event) {
+      this.$store.state.currentUnionLotto().test({
+        gas: 300000,
+        from: this.$store.state.web3.coinbase
+      }, (err, result) => {
+        if (err) {
+          // console.log('error in getResult')
+          // console.log(err)
+          this.pending = false
+        } else {
+          // 获得账户投注的所有彩票
+          console.log('获得账户投注的所有彩票')
+          console.log(result)
+          // console.log(JSON.getJSONArray(result))
+          var temp = JSON.stringify(result).slice(1,-1).split(',')
+          // console.log(temp)
+          // console.log(temp.length)
+          if(temp.length === 1){
+            this.hasBet = false
+            this.pending = false
+            return
+          }
+          for(var i = 0; i < temp.length; i += 8) {
+            var tempNumbers = []
+            var tempCount = 0
+            for(var j = 0; j < 7; j++) {
+              tempNumbers.push(parseInt(temp[i+j].slice(1,-1)))
+            }
+            var tempCount = parseInt(temp[i+7].slice(1,-1))
+            // console.log('tempNumbers')
+            // console.log(tempNumbers)
+            var level = 0;
+            (function (bets, result, contract, coinbase, numbers, i, pending) {
+              contract.checkPriceLevel(numbers,{
+                gas: 300000,
+                from: coinbase
+              }, (err, result) => {
+                if(err) {
+                  console.log(e)
+                } else {
+                  pending = false
+                  // console.log('checkPriceLevel')
+                  // console.log(numbers)
+                  // console.log(JSON.stringify(result).slice(1,-1))
+                  level = JSON.stringify(result).slice(1,-1)
+                  if(level == 0)
+                    level = "TO BE EXPECTED"
+                  if(level == 0)
+                    level = "NONE"
+                  console.log('push')
+                  bets.push({
+                    no: i/8 + 1,
+                    red: numbers[0],
+                    blues: numbers.splice(1,6),
+                    count: tempCount,
+                    level: level
+                  })
+                }
+              })
+            })(this.bets, result, this.$store.state.currentUnionLotto(),this.$store.state.web3.coinbase, tempNumbers, i, this.pending);
+          }
         }
       })
     }

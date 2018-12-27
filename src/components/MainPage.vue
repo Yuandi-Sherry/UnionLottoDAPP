@@ -6,7 +6,8 @@
       <div class="bet" @click='goBetPage'>BET</div>
       <div class="result" @click="goResultPage">RESULT</div>
     </div>
-    
+    <button @click="testPublish">test publish </button>
+    <button @click="test">test </button>
   </div>
 </template>
 <script>
@@ -28,6 +29,21 @@ export default {
       this.$router.push({
         path: '/result'
       })
+    },
+    testPublish(event) {
+      this.$store.dispatch('publishUnionLotto', {name: this.$store.state.unionLottoName, date: "1", address: '0x4c02d8d6cf951e636642a21f43bbb46c7fbf9342'})
+    },
+    test(event) {
+      // console.log(this.$store.state.web3.coinbase)
+      this.$store.state.SeniorAuthority().test(this.$store.state.unionLottoName,{
+          gas: 300000,
+          from: this.$store.state.web3.coinbase
+        }, (err, result) => {
+          if (err) {
+          } else {
+            console.log(JSON.stringify(result))
+          }
+        })
     }
   },
   computed: {
@@ -43,6 +59,7 @@ export default {
   created () {
     console.log('registerWeb3 Action dispatched from casino-dapp.vue')
     this.$store.dispatch('registerWeb3')
+    this.$store.dispatch('getSeniorAuthority')
   },
   components: {
     'hello-metamask': HelloMetamask

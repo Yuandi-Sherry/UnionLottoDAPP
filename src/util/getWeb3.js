@@ -1,5 +1,4 @@
 import Web3 from 'web3'
-
 /*
 * 1. Check for injected web3 (mist/metamask)
 * 2. If metamask/mist create a new web3 instance and pass on result
