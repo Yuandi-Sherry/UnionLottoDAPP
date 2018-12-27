@@ -167,7 +167,7 @@ export default {
     console.log('dispatching setCurrentUnionLotto')
     console.log(this.$store.state.SeniorAuthority)
     this.$store.dispatch('getUnionLotto', {name:this.$store.state.unionLottoName,}).then(response=>{
-      console.log(this.$store.state.currentUnionLotto())
+      console.log("当前彩票" + this.$store.state.currentUnionLotto())
       this.$store.state.currentUnionLotto().isAuthority({
           gas: 300000,
           from: this.$store.state.web3.coinbase

@@ -166,11 +166,26 @@ export default {
         } else {
           console.log('获得目前为止的所有彩票')
           console.log(result)
-          for(var i = 0; i < result.length; i++) {
+          for(var i = 1; i < result.length; i++) {
             this.allUnionLottos.push(result[i])
           }
+          this.$store.state.SeniorAuthority().getLatest({
+            gas: 300000,
+            from: this.$store.state.web3.coinbase
+          }, (err, result) => {
+            if(err) {
+              console.log(err)
+            } else {
+              console.log('获得最后一个彩票的日期')
+              console.log(result)
+              this.allUnionLottos.push(result);
+            }
+          })
+
         }
       })
+      
+      
     }).catch(response=>{ 
        console.log(response)
     })   

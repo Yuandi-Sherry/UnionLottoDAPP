@@ -24,6 +24,20 @@ const ABI = [
   },
   {
     "constant": true,
+    "inputs": [],
+    "name": "getState",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
     "inputs": [
       {
         "name": "range",
@@ -300,25 +314,7 @@ const ABI = [
     "type": "function"
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "test",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
-      {
-        "name": "_id",
-        "type": "string"
-      },
       {
         "name": "_date",
         "type": "string"

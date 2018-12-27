@@ -1,12 +1,8 @@
-const address = '0xcc77375cd1dcc6ea4d4a5c82c70dd767c7a15387'
+const address = '0x6d19b67bcb9f1117bc357f79e8ef83ab45c2d87b'
 const ABI = [
   {
     "constant": false,
     "inputs": [
-      {
-        "name": "name",
-        "type": "string"
-      },
       {
         "name": "date",
         "type": "string"
@@ -20,12 +16,17 @@ const ABI = [
   },
   {
     "constant": true,
-    "inputs": [],
-    "name": "getLottos",
+    "inputs": [
+      {
+        "name": "date",
+        "type": "string"
+      }
+    ],
+    "name": "getContractAddress",
     "outputs": [
       {
         "name": "",
-        "type": "string[]"
+        "type": "address"
       }
     ],
     "payable": false,
@@ -34,17 +35,26 @@ const ABI = [
   },
   {
     "constant": true,
-    "inputs": [
-      {
-        "name": "name",
-        "type": "string"
-      }
-    ],
-    "name": "test",
+    "inputs": [],
+    "name": "getLatest",
     "outputs": [
       {
         "name": "",
-        "type": "address"
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getLottos",
+    "outputs": [
+      {
+        "name": "",
+        "type": "string[]"
       }
     ],
     "payable": false,

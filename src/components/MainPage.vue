@@ -7,8 +7,7 @@
       <div class="result" @click="goResultPage">RESULT</div>
     </div>
     <input type="date" v-model="date">
-    <button @click="testPublish">test publish </button>
-    <button @click="test">test </button>
+    <button @click="publishNewUnionLotto">PUBLISH A NEW UNION LOTTO</button>
   </div>
 </template>
 <script>
@@ -18,7 +17,8 @@ export default {
   data () {
     return {
       valid: false,
-      date: null
+      date: null,
+
     }
   },
   methods: {
@@ -32,21 +32,38 @@ export default {
         path: '/result'
       })
     },
-    testPublish(event) {
-      console.log(this.date)
-      this.$store.dispatch('publishUnionLotto', {name: this.date, date: "1", address: '0x4c02d8d6cf951e636642a21f43bbb46c7fbf9342'})
-    },
-    test(event) {
-      // console.log(this.$store.state.web3.coinbase)
-      this.$store.state.SeniorAuthority().test(this.date,{
-          gas: 300000,
-          from: this.$store.state.web3.coinbase
-        }, (err, result) => {
-          if (err) {
-          } else {
-            console.log(JSON.stringify(result))
+    publishNewUnionLotto(event) {
+      if(this.date == null) {
+        // 未输入日期
+        console.log("请输入日期")
+      } else {
+        // 检查上次是否开奖
+        // 已有日期
+        if(this.$store.state.unionLottoName !== "") {
+          // 判断本次日期大于上次
+          if(this.date <= this.$store.state.unionLottoName) {
+            console.log("日期有误，应当大于上一次")
+            return
           }
-        })
+          // 判断上一个智能合约是否已经开奖
+          this.$store.state.currentUnionLotto().getState({
+            gas: 300000,
+            from: this.$store.state.web3.coinbase
+          }, (err, result) => {
+            if(err) {
+              console.log(err)
+            } else {
+              if(result == true) {
+                console.log("请先结束上一个合约，再部署下一个")
+              } else {
+                this.$store.dispatch('publishUnionLotto', {name: this.date})
+              }
+            }
+          })
+        } else {
+          this.$store.dispatch('publishUnionLotto', {name: this.date})
+        }
+      }
     }
   },
   computed: {

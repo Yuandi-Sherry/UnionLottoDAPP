@@ -1,35 +1,33 @@
 pragma solidity ^0.4.22;
-// pragma experimental ABIEncoderV2;
+pragma experimental ABIEncoderV2;
 contract SenoirAuthority {
-    uint count;
-    address temp;
+    // uint count;
+    // address temp;
     mapping(string=>address) UnionLottos;
+    string [] names;
     // address [] UnionLottos;
-    constructor() {
-        count = 0;
-    }
-    
-    //  function () payable public {
-    //      revert();
+    // constructor() {
+    //     // count = 0;
     // }
     
-    function creator(string name, string date) public returns (UnionLotto) {
-        return new UnionLotto(name, date);
-    }
     function createUnionLotto(string name, string date) public {
         // return count;
         // count = 1;
         // address returnAddress = 
         // UnionLottos.push(new UnionLotto(name, date));
-       
-        temp = new UnionLotto(name, date);
+       names.push(name);
+    //   temp = 
+       UnionLottos[name] = new UnionLotto(name, date);
         // count++;
         // count = 2;
         
     }
     
+    function getLottos() constant public returns (string []) {
+        return names;
+    }
     function test(string name) constant returns (address){
-        return temp;
+        return UnionLottos[name];
     }
  
 }
