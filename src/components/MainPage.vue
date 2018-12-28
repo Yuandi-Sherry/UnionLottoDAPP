@@ -8,12 +8,10 @@
     </div>
     <div v-if='authority' id="managePart">
       <div class="warning">{{ warning }} </div>
-      <p>DATE</p>
       <input type="date" v-model="date" placeholder="2019-01-01">
-      <p>PRIZE POOL</p>
-      <input type="number" v-model="value" placeholder="100">
       <button @click="publishNewUnionLotto" class="button">PUBLISH A NEW UNION LOTTO</button>
       <button @click="draw" class="button">DRAW THE LAST UNION LOTTO</button>
+      <button @click="testDraw" class="button">TEST DRAWING</button>
     </div>
     
   </div>
@@ -105,7 +103,33 @@ export default {
           }
         }
       })
-      
+    },
+    testDraw(event) {
+      this.$store.state.currentUnionLotto().getState({
+        gas: 300000,
+        from: this.$store.state.web3.coinbase
+      }, (err, result) => {
+        if(err) {
+          console.log(err)
+        } else {
+          if(result == true) {
+            this.$store.state.currentUnionLotto().testDraw([1,2,3,4,5,6,7],{
+              gas: 3000000,
+              from: this.$store.state.web3.coinbase
+            }, (err, result) => {
+              if (err) {
+                console.log('error')
+                console.log(err)
+                this.pending = false
+              } else {
+                console.log('drew successfully')
+              }
+            })
+          } else {
+            this.warning = "This lotto is already drawn"
+          }
+        }
+      })
     }
   },
   computed: {
@@ -116,25 +140,18 @@ export default {
   created () {
     this.$store.dispatch('registerWeb3')
     this.$store.dispatch('getSeniorAuthority').then(result => {
-      this.$store.state.SeniorAuthority().getLatest({
+      this.$store.state.SeniorAuthority().isAuthority({
         from: this.$store.state.web3.coinbase,
         gas: 3000000
       }, (err, result) => {
-        this.$store.dispatch('getUnionLotto', {name:result}).then(response=>{
-          // console.log("当前彩票" + this.$store.state.currentUnionLotto())
-          this.$store.state.currentUnionLotto().isAuthority({
-            gas: 500000,
-            from: this.$store.state.web3.coinbase
-          },
-          (err, result) => {
-            if (err) {
-              console.log('error in methods created in MainPage.vue')
-              this.pending = false
-            } else {
-              this.authority = JSON.stringify(result) == 'true' ? true : false
-            }
-          })
-        })
+        if (err) {
+          console.log('error in methods created in MainPage.vue')
+          this.pending = false
+        } else {
+          this.authority = JSON.stringify(result) == 'true' ? true : false
+          console.log('------- isAuthority')
+          console.log(this.authority)
+        }
       })      
     })
   },
@@ -297,5 +314,9 @@ input {
   font-size: 10pt;
   margin: 10px;
   height: 30px;
+}
+
+#managePart {
+  text-align: center;
 }
 </style>

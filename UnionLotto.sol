@@ -2,18 +2,24 @@ pragma solidity ^0.4.22;
 pragma experimental ABIEncoderV2;
 contract SenoirAuthority {
     // uint count;
-    // address temp;
+    address authority;
     mapping(string=>address) UnionLottos;
     string [] dates;
     
+    constructor() public {
+        authority = 0x4C02D8D6CF951E636642a21F43BBB46C7fBF9342;
+    }
     function createUnionLotto(string date) public {
        dates.push(date);
        UnionLottos[date] = new UnionLotto(date);
+    //   require(, "There isn't enough ether in this contract")
+    //   UnionLottos[date].transfer(msg.value);
     }
     
     function getLottos() constant public returns (string []) {
         return dates;
     }
+    
     function getLatest() constant returns (string){
         return dates[dates.length-1];
     }
@@ -21,7 +27,14 @@ contract SenoirAuthority {
     function getContractAddress(string date) constant returns (address){
         return UnionLottos[date];
     }
- 
+    
+    function () payable public {
+         revert();
+    }
+    
+    function isAuthority() constant returns (bool) {
+        return authority == msg.sender;
+    }
 }
 
 contract UnionLotto {
@@ -54,11 +67,11 @@ contract UnionLotto {
     }
     constructor(string _date) public payable{
         // authority = _authority;
-        authority = msg.sender;
+        authority = 0x4C02D8D6CF951E636642a21F43BBB46C7fBF9342;
         // taxAuthorities = 0x5E509908c1Ea98B2F4cBaDc255B82FF8648B6D3D;
         // charity =0xE7b740EBA3bD52983f09482f03D6bFbeAC45a90b;
         
-        //require(msg.sender == authority, "You don't have the right to post a lottery"); // success
+        // require(msg.sender == authority, "You don't have the right to post a lottery"); // success
         prizePond = msg.value;
         date = _date;
         // todo using event
@@ -78,7 +91,7 @@ contract UnionLotto {
     * randomly generate winnerNumbers
     */
     function draw() public payable{
-        // require(msg.sender == authority, "You are not the deployer of this contract");
+        require(msg.sender == authority, "You are not the deployer of this contract");
         //todo change to emit a event
         lottoOn = false;
         uint range = 32*15*15*15*15*15*15;
@@ -113,7 +126,7 @@ contract UnionLotto {
     */
     function testDraw(uint[7] results) public payable{
         //todo change to emit a event
-        // require(msg.sender == authority);
+        require(msg.sender == authority);
         lottoOn = false;
         winnerNumbers = results;
         computeResults();

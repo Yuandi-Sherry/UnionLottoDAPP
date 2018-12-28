@@ -1,4 +1,4 @@
-const address = '0x56de5b5c61f5903c17f8edb806ea6f3b0ecdb670'
+const address = '0x16385ac6af245aadfbf5536e216ed5711079b289'
 const ABI = [
   {
     "constant": false,
@@ -13,6 +13,17 @@ const ABI = [
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "inputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "fallback"
   },
   {
     "constant": true,
@@ -55,6 +66,20 @@ const ABI = [
       {
         "name": "",
         "type": "string[]"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "isAuthority",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
       }
     ],
     "payable": false,

@@ -104,8 +104,6 @@ export const store = new Vuex.Store({
         state.SeniorAuthority().createUnionLotto(payload.name, {
           gas: 3000000,
           from: state.web3.coinbase
-          // todo, change it to none payable
-          // value: state.web3.web3Instance().toWei(payload.value, 'ether')
         }, (err, result) => {
           if (err) {
             console.log('---- error in publishUnionLotto ----')
@@ -132,6 +130,8 @@ export const store = new Vuex.Store({
               console.log(e)
             } else {
               // get the address of current lotto and deploy
+              console.log('---- CURRENT LOTTO ADDRESS ----')
+              console.log(result)
               var UnionLottoAddress = result
               let web3 = new Web3(window.web3.currentProvider)
               let unionLotto = web3.eth.contract(ABI)
