@@ -6,11 +6,11 @@
       <div class="bet" @click='goBetPage'>BET</div>
       <div class="result" @click="goResultPage">RESULT</div>
     </div>
-    <div id="managePart" v-if="authority"></div>
+    <div v-if='authority' id="managePart">
       <div class="warning">{{ warning }} </div>
       <input type="date" v-model="date" placeholder="2019-01-01">
       <button @click="publishNewUnionLotto" class="button">PUBLISH A NEW UNION LOTTO</button>
-      <button class="button">DRAW THE LAST UNION LOTTO</button>
+      <button @click="draw" class="button">DRAW THE LAST UNION LOTTO</button>
     </div>
     
   </div>
@@ -72,37 +72,50 @@ export default {
           this.$store.dispatch('publishUnionLotto', {name: this.date})
         }
       }
+    },
+    draw (event) {
+      this.$store.state.currentUnionLotto().draw({
+        gas: 3000000,
+        from: this.$store.state.web3.coinbase
+      }, (err, result) => {
+        if (err) {
+          console.log('error')
+          console.log(err)
+          this.pending = false
+        } else {
+          console.log('drew successfully')
+        }
+      })
     }
   },
   computed: {
     getMetaMaskState() {
-      console.log('computed getMetaMaskState in MainPage')
       return this.$store.state.web3.coinbase
     }
   }, 
   created () {
-    console.log('registerWeb3 Action dispatched from casino-dapp.vue')
     this.$store.dispatch('registerWeb3')
     this.$store.dispatch('getSeniorAuthority').then(result => {
-      console.log("then in create")
-
-        this.$store.dispatch('getUnionLotto', {name:this.$store.state.unionLottoName}).then(response=>{
-          console.log("当前彩票" + this.$store.state.currentUnionLotto())
+      this.$store.state.SeniorAuthority().getLatest({
+        from: this.$store.state.web3.coinbase,
+        gas: 3000000
+      }, (err, result) => {
+        this.$store.dispatch('getUnionLotto', {name:result}).then(response=>{
+          // console.log("当前彩票" + this.$store.state.currentUnionLotto())
           this.$store.state.currentUnionLotto().isAuthority({
             gas: 500000,
             from: this.$store.state.web3.coinbase
           },
           (err, result) => {
             if (err) {
-              console.log('error')
+              console.log('error in methods created in MainPage.vue')
               this.pending = false
             } else {
               this.authority = JSON.stringify(result) == 'true' ? true : false
-              console.log('isAuthority')
-              console.log(this.authority)
             }
           })
         })
+      })      
     })
   },
   components: {

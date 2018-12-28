@@ -8,11 +8,15 @@
           <div >{{ blue }}</div>
       </div>
     </div>
-    <div class="allLottos" v-for="lottos in allUnionLottos">
-
-     <p @click="changeLottos">{{ lottos }}</p>
+    <div class="dateContainer">
+      <p>Recent Lottos</p>
+      <div  v-for="lottos in allUnionLottos">
+       <p @click="changeLottos" class="allLottos">{{ lottos }}</p>
+      </div>
     </div>
     <br>
+    
+    
     <div v-if="!hasBet" class="hasntBet">
       <p v-if="!hasBet">You haven't bet anything. </p>
     </div>
@@ -28,7 +32,6 @@
           <td v-if="displayResult">{{ bet.level }}</td>
       </tr>
     </table>
-    <button @click="getWinnerNumbers">getWinnernumbers</button>
   </div>
   
 </template>
@@ -109,7 +112,7 @@ export default {
                   level = JSON.stringify(result).slice(1,-1)
                   if(level == 0)
                     level = "TO BE EXPECTED"
-                  if(level == 0)
+                  if(level == 7)
                     level = "NONE"
                   console.log('push')
                   bets.push({
@@ -378,6 +381,48 @@ td {
 }
 .result {
   height: 90px;
+}
+
+table {
+  min-width: 700px;
+  float: right;
+  min-width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-right: 15%;
+}
+td {
+  text-align: center;
+}
+.dateContainer {
+  float: left;
+  margin-left: 15%;
+  width: 10%;
+}
+.dateContainer > p {
+  font-weight: bold;
+}
+.allLottos {
+  display: block;
+  width: 100%;
+  padding: 5px;
+  /*margin: 10px;*/
+  border-radius: 10px;
+  background: linear-gradient(#2A2A4A, #1F1F41);
+}
+.allLottos:hover {
+  background: linear-gradient(#3A3A57, #2A2A4A);
+  transition: 5s;
+}
+.hasntBet {
+  float: right;
+  min-width: 50%;
+  /*margin: auto;*/
+  margin-right: 15%;
+}
+.hasntBet p {
+  vertical-align: center;
+  font-weight: bold;
 }
 
 </style>

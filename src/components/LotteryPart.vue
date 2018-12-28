@@ -17,7 +17,7 @@
       <p class="warning">{{ warningMsg }}</p>
       <input v-model='amount' type='number' class="betAmount" placeholder='1' min="1">
       <button v-on:click='bet' class="betButton">Bet</button>
-      <button  v-if="authority" v-on:click='draw' class="drawButton">Draw</button>
+      <!-- <button  v-if="authority" v-on:click='draw' class="drawButton">Draw</button> -->
     </div>
     <loadingPart v-if='pending'></loadingPart>
   </div>
@@ -250,21 +250,6 @@ export default {
           }
         })
       }      
-    },
-    draw (event) {
-      console.log('start successfully')
-      this.$store.state.currentUnionLotto().draw({
-        gas: 3000000,
-        from: this.$store.state.web3.coinbase
-      }, (err, result) => {
-        if (err) {
-          console.log('error')
-          console.log(err)
-          this.pending = false
-        } else {
-          console.log('drew successfully')
-        }
-      })
     },
     getUsers (event) {
       this.$store.state.currentUnionLotto().getUsers({
