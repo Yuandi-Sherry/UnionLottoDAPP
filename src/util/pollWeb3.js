@@ -8,10 +8,10 @@ let pollWeb3 = function (state) {
 
   setInterval(() => {
     if (web3 && store.state.web3.web3Instance) {
-      console.log("web3.eth.coinbase1----------" +JSON.stringify(store.state.web3.coinbase) )
-       console.log("web3.eth.coinbase2----------" + typeof(JSON.stringify(web3.eth.coinbase) ))
-      console.log("web3.eth.coinbase3----------")
-      console.log(web3.eth.coinbase == null)
+      // console.log("web3.eth.coinbase1----------" +JSON.stringify(store.state.web3.coinbase) )
+      //  console.log("web3.eth.coinbase2----------" + typeof(JSON.stringify(web3.eth.coinbase) ))
+      // console.log("web3.eth.coinbase3----------")
+      // console.log(web3.eth.coinbase == null)
       if(web3.eth.coinbase == null) {
         console.log('未登录')
         // store.dispatch('registerWeb3')
@@ -24,8 +24,8 @@ let pollWeb3 = function (state) {
                 console.log("err")
                 console.log(err)
               } else {
-                console.log("result")
-                console.log(newCoinbase)
+                // console.log("result")
+                // console.log(newCoinbase)
                 store.dispatch('pollWeb3', {
                   coinbase: newCoinbase,
                   balance: parseInt(newBalance, 10)
