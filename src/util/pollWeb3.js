@@ -37,9 +37,10 @@ let pollWeb3 = function (state) {
               console.log("---- error in getBalance ----")
               console.log(err)
             } else if (parseInt(polledBalance, 10) !== store.state.web3.balance) {
+              
               store.dispatch('pollWeb3', {
                 coinbase: store.state.web3.coinbase,
-                balance: polledBalance
+                balance: polledBalance/1000000000000000000
               })
             }
           })

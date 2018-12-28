@@ -18,7 +18,9 @@ export const store = new Vuex.Store({
       web3Copy.isInjected = result.injectedWeb3
       web3Copy.networkId = result.networkId
       web3Copy.coinbase = result.coinbase
-      web3Copy.balance = parseInt(result.balance, 10)
+      web3Copy.balance = result.balance
+      console.log("-------------------- payload.balance ------------------" + payload.balance)
+      console.log("-------------------- web3Copy.balance ------------------" + web3Copy.balance)
       web3Copy.web3Instance = result.web3
       state.web3 = web3Copy
       pollWeb3()
@@ -28,7 +30,7 @@ export const store = new Vuex.Store({
       // console.log('pollWeb3Instance mutation being executed', payload)
       state.web3.coinbase = payload.coinbase
       // console.debug(parseInt(payload.balance, 10))
-      state.web3.balance = parseInt(payload.balance, 10)/1000000000000000000
+      state.web3.balance = payload.balance
     },
     registerSeniorAuthority (state, payload) {
       state.SeniorAuthority = () => payload

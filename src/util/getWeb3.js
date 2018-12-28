@@ -66,6 +66,7 @@ let getWeb3 = new Promise(function (resolve, reject) {
           if (err) {
             reject(new Error('Unable to retrieve balance for address: ' + result.coinbase))
           } else {
+            var balance = balance/1000000000000000000
             result = Object.assign({}, result, { balance })
             resolve(result)
           }
