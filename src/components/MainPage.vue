@@ -8,7 +8,10 @@
     </div>
     <div v-if='authority' id="managePart">
       <div class="warning">{{ warning }} </div>
+      <p>DATE</p>
       <input type="date" v-model="date" placeholder="2019-01-01">
+      <p>PRIZE POOL</p>
+      <input type="number" v-model="value" placeholder="100">
       <button @click="publishNewUnionLotto" class="button">PUBLISH A NEW UNION LOTTO</button>
       <button @click="draw" class="button">DRAW THE LAST UNION LOTTO</button>
     </div>
@@ -25,7 +28,8 @@ export default {
       valid: false,
       date: null,
       warning: '',
-      authority: false
+      authority: false,
+      value: 100
     }
   },
   methods: {
@@ -64,28 +68,44 @@ export default {
               if(result == true) {
                 this.warning = "Please draw the last Union Lotto before publishing a new one"
               } else {
-                this.$store.dispatch('publishUnionLotto', {name: this.date})
+                this.$store.dispatch('publishUnionLotto', {name: this.date, value: this.value})
               }
             }
           })
         } else {
-          this.$store.dispatch('publishUnionLotto', {name: this.date})
+          this.$store.dispatch('publishUnionLotto', {name: this.date, value: this.value})
         }
       }
     },
     draw (event) {
-      this.$store.state.currentUnionLotto().draw({
-        gas: 3000000,
+      // judge whether this lottos has already been drawn
+      this.$store.state.currentUnionLotto().getState({
+        gas: 300000,
         from: this.$store.state.web3.coinbase
       }, (err, result) => {
-        if (err) {
-          console.log('error')
+        if(err) {
           console.log(err)
-          this.pending = false
         } else {
-          console.log('drew successfully')
+          if(result == true) {
+            this.$store.state.currentUnionLotto().draw({
+              gas: 3000000,
+              from: this.$store.state.web3.coinbase
+            }, (err, result) => {
+              if (err) {
+                console.log('error')
+                console.log(err)
+                this.pending = false
+              } else {
+
+                console.log('drew successfully')
+              }
+            })
+          } else {
+            this.warning = "This lotto is already drawn"
+          }
         }
       })
+      
     }
   },
   computed: {

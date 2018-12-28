@@ -11,7 +11,7 @@
     <div class="dateContainer">
       <p>Recent Lottos</p>
       <div  v-for="lottos in allUnionLottos">
-       <p @click="changeLottos" class="allLottos">{{ lottos }}</p>
+       <p @click="changeLottos" :class="{'allLottos': lottos != currentLotto, 'chosen': lottos == currentLotto}">{{ lottos }}</p>
       </div>
     </div>
     <br>
@@ -48,7 +48,8 @@ export default {
       pending: true,
       displayResult: true,
       announcedMsg: "",
-      allUnionLottos: []
+      allUnionLottos: [],
+      currentLotto: ''
   	}
   },
   computed: {
@@ -65,6 +66,7 @@ export default {
   mounted() {
   	console.log('------debug3--------- ' + this.$store.state.recordPageName)
     this.$store.dispatch('getUnionLotto', {name: this.$store.state.recordPageName}).then(response=> {
+      this.currentLotto = this.$store.state.recordPageName
       // 获得此人投注本期彩票的所有记录
       this.$store.state.currentUnionLotto().getResult({
         gas: 300000,
@@ -107,12 +109,13 @@ export default {
                 } else {
                   pending = false
                   // console.log('checkPriceLevel')
-                  // console.log(numbers)
+
+                  console.log(numbers)
                   // console.log(JSON.stringify(result).slice(1,-1))
                   level = JSON.stringify(result).slice(1,-1)
-                  if(level == 0)
+                  if(level == '0')
                     level = "TO BE EXPECTED"
-                  if(level == 7)
+                  if(level == '7')
                     level = "NONE"
                   console.log('push')
                   bets.push({
@@ -232,6 +235,7 @@ export default {
     },
     changeLottos(event) {
       this.$store.dispatch('changeRecordPage', event.target.innerHTML).then(result=> {
+        this.currentLotto = event.target.innerHTML
         // console.log("then of changeRecordPage in recordPart")
         this.$store.dispatch('getUnionLotto', {name: this.$store.state.recordPageName}).then(response=> {
           this.$store.state.currentUnionLotto().getResult({
@@ -281,7 +285,7 @@ export default {
                       level = JSON.stringify(result).slice(1,-1)
                       if(level == 0)
                         level = "TO BE EXPECTED"
-                      if(level == 0)
+                      if(level == 7)
                         level = "NONE"
                       console.log('push')
                       bets.push({
@@ -402,13 +406,17 @@ td {
 .dateContainer > p {
   font-weight: bold;
 }
-.allLottos {
+.allLottos, .chosen {
   display: block;
   width: 100%;
   padding: 5px;
   /*margin: 10px;*/
   border-radius: 10px;
   background: linear-gradient(#2A2A4A, #1F1F41);
+}
+.chosen {
+  color: #CF8143;
+
 }
 .allLottos:hover {
   background: linear-gradient(#3A3A57, #2A2A4A);
