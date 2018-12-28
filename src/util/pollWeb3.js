@@ -37,7 +37,7 @@ let pollWeb3 = function (state) {
           }
         }
         else {
-          console.log("store.state.web3.coinbase----------" + store.state.web3.coinbase)
+          // console.log("store.state.web3.coinbase----------" + store.state.web3.coinbase)
           web3.eth.getBalance(store.state.web3.coinbase, (err, polledBalance) => {
             if (err) {
               console.log(err)

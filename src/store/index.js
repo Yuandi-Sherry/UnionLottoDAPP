@@ -84,7 +84,7 @@ export const store = new Vuex.Store({
           } else if(result.length === 1) {
             // 显示出现问题
             console.log("WARNING: There's only one deployed UnionLotto Contract")
-            state.SeniorAuthority().getFirstName({
+            state.SeniorAuthority().getLatest({
               from: state.web3.coinbase,
               gas: 3000000
             }, (err, result) => {

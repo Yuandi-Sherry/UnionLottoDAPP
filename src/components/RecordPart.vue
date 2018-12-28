@@ -17,14 +17,11 @@
       <p v-if="!hasBet">You haven't bet anything. </p>
     </div>
     <table v-if="hasBet">
-      <th>No</th>
       <th>Red Ball</th>
       <th>Blue Balls</th>
       <th># of bets</th>
       <th v-if="displayResult">Level of Prize</th>
       <tr v-for="bet in bets">
-        <!-- <tbody> -->
-          <td>{{ bet.no }}</td>
           <td><div :class="{red: bet.red == getWinningRed, ball: bet.red != getWinningRed}">{{ bet.red }}</div> </td>
           <td><div :class="{blue: winningBlues.indexOf(blue+'')!= -1, ball: winningBlues.indexOf(blue + '') === -1}" v-for="blue in bet.blues" @click="test">{{ blue }}</div></td>
           <td>{{ bet.count }}</td>

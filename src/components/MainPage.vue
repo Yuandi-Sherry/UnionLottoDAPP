@@ -6,10 +6,13 @@
       <div class="bet" @click='goBetPage'>BET</div>
       <div class="result" @click="goResultPage">RESULT</div>
     </div>
-    <div class="warning">{{ warning }} </div>
-    <input type="date" v-model="date" placeholder="2019-01-01">
-    <button @click="publishNewUnionLotto" class="button">PUBLISH A NEW UNION LOTTO</button>
-    <button class="button">DRAW THE LAST UNION LOTTO</button>
+    <div id="managePart" v-if="authority"></div>
+      <div class="warning">{{ warning }} </div>
+      <input type="date" v-model="date" placeholder="2019-01-01">
+      <button @click="publishNewUnionLotto" class="button">PUBLISH A NEW UNION LOTTO</button>
+      <button class="button">DRAW THE LAST UNION LOTTO</button>
+    </div>
+    
   </div>
 
 </template>
@@ -21,7 +24,8 @@ export default {
     return {
       valid: false,
       date: null,
-      warning: ''
+      warning: '',
+      authority: false
     }
   },
   methods: {
@@ -73,20 +77,33 @@ export default {
   computed: {
     getMetaMaskState() {
       console.log('computed getMetaMaskState in MainPage')
-      try {
-        if(this.$store.state.web3.coinbase == null) {
-          return false
-        }
-        return true
-      } catch(e) {
-        return false
-      } 
+      return this.$store.state.web3.coinbase
     }
   }, 
   created () {
     console.log('registerWeb3 Action dispatched from casino-dapp.vue')
     this.$store.dispatch('registerWeb3')
-    this.$store.dispatch('getSeniorAuthority')
+    this.$store.dispatch('getSeniorAuthority').then(result => {
+      console.log("then in create")
+
+        this.$store.dispatch('getUnionLotto', {name:this.$store.state.unionLottoName}).then(response=>{
+          console.log("当前彩票" + this.$store.state.currentUnionLotto())
+          this.$store.state.currentUnionLotto().isAuthority({
+            gas: 500000,
+            from: this.$store.state.web3.coinbase
+          },
+          (err, result) => {
+            if (err) {
+              console.log('error')
+              this.pending = false
+            } else {
+              this.authority = JSON.stringify(result) == 'true' ? true : false
+              console.log('isAuthority')
+              console.log(this.authority)
+            }
+          })
+        })
+    })
   },
   components: {
     'hello-metamask': HelloMetamask
