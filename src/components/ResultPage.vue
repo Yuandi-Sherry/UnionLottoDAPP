@@ -2,7 +2,7 @@
   <div>
     <hello-metamask/>
     <result-component/>
-    <img @click="back" class="button"  src="../assets/backButton.png">back</img>
+    <img @click="back" class="button"  src="../assets/backButton.png"></img>
   </div>
 </template>
 <script>

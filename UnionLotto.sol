@@ -4,30 +4,22 @@ contract SenoirAuthority {
     // uint count;
     // address temp;
     mapping(string=>address) UnionLottos;
-    string [] names;
-    // address [] UnionLottos;
-    // constructor() {
-    //     // count = 0;
-    // }
+    string [] dates;
     
-    function createUnionLotto(string name, string date) public {
-        // return count;
-        // count = 1;
-        // address returnAddress = 
-        // UnionLottos.push(new UnionLotto(name, date));
-       names.push(name);
-    //   temp = 
-       UnionLottos[name] = new UnionLotto(name, date);
-        // count++;
-        // count = 2;
-        
+    function createUnionLotto(string date) public {
+       dates.push(date);
+       UnionLottos[date] = new UnionLotto(date);
     }
     
     function getLottos() constant public returns (string []) {
-        return names;
+        return dates;
     }
-    function test(string name) constant returns (address){
-        return UnionLottos[name];
+    function getLatest() constant returns (string){
+        return dates[dates.length-1];
+    }
+    
+    function getContractAddress(string date) constant returns (address){
+        return UnionLottos[date];
     }
  
 }
@@ -60,14 +52,13 @@ contract UnionLotto {
     uint[7] numbers; // 选取的号码: 0->red, 1~6->blue
     uint count; // buy count bets this time. 买了count注
     }
-    constructor(string _id, string _date) public payable{
+    constructor(string _date) public payable{
         // authority = _authority;
         authority = msg.sender;
         // taxAuthorities = 0x5E509908c1Ea98B2F4cBaDc255B82FF8648B6D3D;
         // charity =0xE7b740EBA3bD52983f09482f03D6bFbeAC45a90b;
         
         //require(msg.sender == authority, "You don't have the right to post a lottery"); // success
-        id = _id;
         prizePond = msg.value;
         date = _date;
         // todo using event
@@ -274,8 +265,8 @@ contract UnionLotto {
         return firstPrize;
     }
     
-    // function test() constant returns (uint) {
-    //     return temp;
-    // }
+    function getState() constant returns (bool) {
+        return lottoOn;
+    }
     
 }

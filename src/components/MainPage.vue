@@ -6,9 +6,12 @@
       <div class="bet" @click='goBetPage'>BET</div>
       <div class="result" @click="goResultPage">RESULT</div>
     </div>
-    <input type="date" v-model="date">
-    <button @click="publishNewUnionLotto">PUBLISH A NEW UNION LOTTO</button>
+    <div class="warning">{{ warning }} </div>
+    <input type="date" v-model="date" placeholder="2019-01-01">
+    <button @click="publishNewUnionLotto" class="button">PUBLISH A NEW UNION LOTTO</button>
+    <button class="button">DRAW THE LAST UNION LOTTO</button>
   </div>
+
 </template>
 <script>
 import HelloMetamask from '@/components/MetaMask'
@@ -18,7 +21,7 @@ export default {
     return {
       valid: false,
       date: null,
-
+      warning: ''
     }
   },
   methods: {
@@ -35,6 +38,7 @@ export default {
     publishNewUnionLotto(event) {
       if(this.date == null) {
         // 未输入日期
+        this.warning = "Please input the lottery date of the Union Lotto to be published"
         console.log("请输入日期")
       } else {
         // 检查上次是否开奖
@@ -42,7 +46,7 @@ export default {
         if(this.$store.state.unionLottoName !== "") {
           // 判断本次日期大于上次
           if(this.date <= this.$store.state.unionLottoName) {
-            console.log("日期有误，应当大于上一次")
+            this.warning = "The date should be after the date of last Union Lotto"
             return
           }
           // 判断上一个智能合约是否已经开奖
@@ -54,7 +58,7 @@ export default {
               console.log(err)
             } else {
               if(result == true) {
-                console.log("请先结束上一个合约，再部署下一个")
+                this.warning = "Please draw the last Union Lotto before publishing a new one"
               } else {
                 this.$store.dispatch('publishUnionLotto', {name: this.date})
               }
@@ -68,7 +72,7 @@ export default {
   },
   computed: {
     getMetaMaskState() {
-      console.log('computed')
+      console.log('computed getMetaMaskState in MainPage')
       try {
         return this.$store.state.web3.isInjected
       } catch(e) {
@@ -163,8 +167,6 @@ export default {
   margin: auto;
   width: 80px;
   height: 80px;
-  /*color of the circle in the center*/
-  z-index: 999999999;
   text-align: center;
   line-height: 80px;
   text-decoration: none;
@@ -196,5 +198,51 @@ export default {
 }
 .bet:hover:after, .result:hover:after{
   opacity: 0.0
+}
+div {
+  text-align: center;
+}
+.button{
+  /*position: fixed;*/
+  /*top: 0px;*/
+  left: 0px;
+  /*height: 30px;*/
+  border-style: none;
+  border-radius: 10px;
+  outline-style: none;
+  margin: 10px;
+  padding: 5px;
+  vertical-align: center;
+  font-family: 'Montserrat';
+  color: white;
+  font-size: 10pt;
+  transition: 0.5s;
+}
+.button {
+  /*background: #272748;*/
+  transition: 0.5s;
+  background: linear-gradient(to right, rgb(13,116,143), #111133);
+}
+.button:hover {
+  /*background: #3A3A57;*/
+  transition: 0.5s;
+  background: linear-gradient(to right, rgb(126,58,67), #111133);
+}
+input {
+  outline-style: none;
+  border-style: none;
+  border-radius: 10px;
+  padding: 3px;
+  font-size: 10pt;
+  content: attr(placeholder) !important;
+  background-color: #3A3A57;
+  color: white;
+  font-family: 'Montserrat';
+}
+
+.warning {
+  font-size: 10pt;
+  margin: 10px;
+  height: 30px;
 }
 </style>

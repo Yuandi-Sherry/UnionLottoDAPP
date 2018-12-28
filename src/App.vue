@@ -38,7 +38,7 @@ export default {
   left: 0px;
   height: 100%;
   width: 100%;
-  margin: 0;
+  margin: 0px;
   padding: 0;
   border: 0;
   font-family: 'Montserrat'

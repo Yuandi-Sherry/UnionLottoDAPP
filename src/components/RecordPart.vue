@@ -1,7 +1,7 @@
 <!-- geth --rpc --nodiscover --datadir data0 --port 30303 --rpcapi "db,eth,net,web3" --rpccorsdomain "*" --networkid 1001 --ipcdisable console 2>>geth.log -->
 <template>
   <div class="body">
-    <p v-if="!hasBet">You haven't bet anything. </p>
+    
     <div class="result" >
         <p>{{ announcedMsg}}</p>
         <div class=red>{{ getWinningRed }}</div>
@@ -9,10 +9,13 @@
           <div >{{ blue }}</div>
       </div>
     </div>
-    <div class="allLottos" v-for="lottos in allUnionLottos">
-     <button @click="changeLottos">{{ lottos }}</button>
+    <div class="dateContainer">
+      <div @click="changeLottos" class="allLottos" v-for="lottos in allUnionLottos">{{ lottos }}
+      </div>
     </div>
-    <br>
+    <!-- <br> -->
+    <div v-if="!hasBet" class="hasntBet">
+      <p>You haven't bet anything. </p> </div>
     <table v-if="hasBet">
       <th>No</th>
       <th>Red Ball</th>
@@ -20,7 +23,6 @@
       <th># of bets</th>
       <th v-if="displayResult">Level of Prize</th>
       <tr v-for="bet in bets">
-        <!-- <tbody> -->
           <td>{{ bet.no }}</td>
           <td><div :class="{red: bet.red == getWinningRed, ball: bet.red != getWinningRed}">{{ bet.red }}</div> </td>
           <td><div :class="{blue: winningBlues.indexOf(blue+'')!= -1, ball: winningBlues.indexOf(blue + '') === -1}" v-for="blue in bet.blues" @click="test">{{ blue }}</div></td>
@@ -28,7 +30,6 @@
           <td v-if="displayResult">{{ bet.level }}</td>
       </tr>
     </table>
-    <button @click="getWinnerNumbers">getWinnernumbers</button>
   </div>
   
 </template>
@@ -364,9 +365,10 @@ export default {
   background-color: #00AA90;
 }
 table {
-  min-width: 700px;
+  float: right;
+  min-width: 50%;
   margin-left: auto;
-  margin-right: auto;
+  margin-right: 15%;
 }
 td {
   text-align: center;
@@ -379,5 +381,35 @@ td {
 .result {
   height: 90px;
 }
+.dateContainer {
+  float: left;
+  margin-left: 15%;
+  width: 10%;
+}
+.allLottos {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  background: linear-gradient(#2A2A4A, #1F1F41);
+}
 
+.allLottos:hover {
+  background: linear-gradient(#3A3A57, #2A2A4A);
+  transition: 0.2s;
+}
+
+.hasntBet {
+  min-height: 100px;
+  float: right;
+  min-width: 50%;
+  margin: auto;
+  margin-right: 15%;
+}
+
+.hasntBet p {
+  vertical-align: center;
+  font-weight: bold;
+}
 </style>
