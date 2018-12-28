@@ -74,7 +74,10 @@ export default {
     getMetaMaskState() {
       console.log('computed getMetaMaskState in MainPage')
       try {
-        return this.$store.state.web3.isInjected
+        if(this.$store.state.web3.coinbase == null) {
+          return false
+        }
+        return true
       } catch(e) {
         return false
       } 

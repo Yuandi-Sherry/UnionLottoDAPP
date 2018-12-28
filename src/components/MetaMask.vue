@@ -1,14 +1,14 @@
 <template>
  <div class="body">
   <p v-if="!web3.isInjected">Please log in Metamask at first</p>
-  <div>
+<!--   <div>
     <p class="title">Metamask:</p>
     <p class="content"> {{ web3.isInjected }}</p>
   </div>
   <div>
     <p class="title">Network:</p>
     <p class="content"> {{ web3.networkId }}</p>
-  </div> 
+  </div>  -->
   <div>
     <p class="title">Account:</p>
     <p class="content"> {{ web3.coinbase }}</p>

@@ -1,16 +1,16 @@
 <template>
   <div class='body'>
-    <p>{{LottoName}}</p>
-    <div class="redBallPart">
-      <p>Choose 1 red ball</p>
-      <div :key="ball" v-for="ball in redBalls">
-        <div :class="{'selectedRedBall': ball == selectedRedBall, 'redBallStyle': ball != selectedRedBall}"  @click="selectRedBall">{{ball}}</div>
+    <p>This Union Lotto will be annouced on {{LottoName}}</p>
+    <div class="blueBallPart">
+      <p>Choose 1 blue ball</p>
+      <div :key="ball" v-for="ball in blueBalls">
+        <div :class="{'selectedBlueBall': ball == selectedBlueBall, 'blueBallStyle': ball != selectedBlueBall}"  @click="selectBlueBall">{{ball}}</div>
       </div>
     </div>
-    <div class="blueBallPart">
-      <p>Choose 6 blue balls</p>
-      <div :key="ball" v-for="ball in blueBalls">
-        <div :class="{'blueBallStyle': selectedBlueBalls.indexOf(ball) === -1, 'selectedBlueBall':  selectedBlueBalls.indexOf(ball) !== -1}"  @click="selectBlueBalls">{{ball}}</div>
+    <div class="redBallPart">
+      <p>Choose 6 red balls</p>
+      <div :key="ball" v-for="ball in redBalls">
+        <div :class="{'redBallStyle': selectedRedBalls.indexOf(ball) === -1, 'selectedRedBall':  selectedRedBalls.indexOf(ball) !== -1}"  @click="selectRedBalls">{{ball}}</div>
       </div>
     </div>
     <div class="betSet">
@@ -20,30 +20,27 @@
       <button  v-if="authority" v-on:click='draw' class="drawButton">Draw</button>
     </div>
     <loadingPart v-if='pending'></loadingPart>
-    <button @click="getUsers">get users</button>
-    
-    <button @click="getResult">get Result</button>
-    <button @click="test">test</button>
   </div>
 </template>
 
 <style scoped>
 /*global*/
 .body {
+  text-align: center;
   position: relative;
   color: white;
   font-family: 'Montserrat';
   margin-left: auto;
   margin-right: auto;
-  min-width: 700px;
-  max-width: 700px;
+  min-width: 800px;
+  max-width: 800px;
   padding-left:130px;
   padding-right:130px;
   padding-top: 20px;
   padding-bottom: 20px;
 }
 /*ball containers*/
-.redBallPart, .blueBallPart {
+.blueBallPart, .redBallPart {
   float: left;
   padding: 5px;
   background: linear-gradient(#2A2A4A, #1F1F41);
@@ -54,14 +51,14 @@
 
 }
 /*balls*/
-.redBallPart {
+.blueBallPart {
   width: 200px;
 }
-.blueBallPart {
-  width: 400px;
+.redBallPart {
+  width: 500px;
 }
-.redBallStyle, .blueBallStyle,.selectedRedBall, .selectedBlueBall,
-.redBallStyle:hover, .blueBallStyle:hover {
+.blueBallStyle, .redBallStyle,.selectedBlueBall, .selectedRedBall,
+.blueBallStyle:hover, .redBallStyle:hover {
   border-radius: 50%;
   color: white;
   height: 30px;
@@ -72,18 +69,18 @@
   margin: 10px;
   line-height: 30px;
 }
-.redBallStyle, .blueBallStyle {
+.blueBallStyle, .redBallStyle {
   background-color: #3A3A57;
-}
-.redBallStyle:hover, .selectedRedBall {
-  background-color: #FF7F50;
-  transition: 0.2s;
 }
 .blueBallStyle:hover, .selectedBlueBall {
   background-color: #00AA90;
   transition: 0.2s;
 }
-.redBallPart p, .blueBallPart p {
+.redBallStyle:hover, .selectedRedBall {
+  background-color: #FF7F50;
+  transition: 0.2s;
+}
+.blueBallPart p, .redBallPart p {
 	min-height: 20px;
 	max-height: 20px;
 }
@@ -104,14 +101,6 @@
   margin-top: 10px;
   margin-left: 10px;
 
-}
-.drawButton{
-  /*display: block;*/
-   /*margin-bottom: 20px;*/
-}
-.betButton {
-  
-  /*margin-bottom: 200px;*/
 }
 .betAmount {
   padding: 5px;
@@ -152,10 +141,10 @@ export default {
       pending: false,
       winEvent: null,
       betNumbersStr: [ ],
-      selectedRedBall: -1,
-      selectedBlueBalls: [ ],
-      blueBalls: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32],
-      redBalls: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+      selectedBlueBall: -1,
+      selectedRedBalls: [ ],
+      redBalls: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33],
+      blueBalls: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
       invalid: false,
       warningMsg: '',
       authority: true,
@@ -189,23 +178,23 @@ export default {
     })
   },
   methods: {
-    selectRedBall (event) {
-      // console.log(this.selectedRedBall == parseInt(event.target.innerHTML));
-      if (this.selectedRedBall === parseInt(event.target.innerHTML)) {
-        this.selectedRedBall = -1
+    selectBlueBall (event) {
+      // console.log(this.selectedBlueBall == parseInt(event.target.innerHTML));
+      if (this.selectedBlueBall === parseInt(event.target.innerHTML)) {
+        this.selectedBlueBall = -1
       } else {
-        this.selectedRedBall = parseInt(event.target.innerHTML)
+        this.selectedBlueBall = parseInt(event.target.innerHTML)
       }
     },
-    selectBlueBalls (event) {
+    selectRedBalls (event) {
       // 判断是否已选择
-      if (this.selectedBlueBalls.indexOf(parseInt(event.target.innerHTML)) !== -1) {
-        this.selectedBlueBalls.splice(this.selectedBlueBalls.indexOf(parseInt(event.target.innerHTML)), 1)
+      if (this.selectedRedBalls.indexOf(parseInt(event.target.innerHTML)) !== -1) {
+        this.selectedRedBalls.splice(this.selectedRedBalls.indexOf(parseInt(event.target.innerHTML)), 1)
       } else {
-        if (this.selectedBlueBalls.length === 6) {
+        if (this.selectedRedBalls.length === 6) {
           console.log('You can only choose 6 balls, you can click a selected ball again to unselect it.')
         } else {
-          this.selectedBlueBalls.push(parseInt(event.target.innerHTML))
+          this.selectedRedBalls.push(parseInt(event.target.innerHTML))
         }
       }
     },
@@ -215,14 +204,14 @@ export default {
       this.warningMsg = ''
       this.invalid = false
       var betNumbers = []
-      if (this.selectedRedBall === -1) {
-        this.warningMsg += 'Please select 1 red ball. '
+      if (this.selectedBlueBall === -1) {
+        this.warningMsg += 'Please select 1 blue ball. '
         console.log()
         this.invalid = true
       }
-      if (this.selectedBlueBalls.length !== 6) {
+      if (this.selectedRedBalls.length !== 6) {
         console.log('没有选择足够的蓝球')
-        if (this.warningMsg == 'Please select 1 red ball. ') {
+        if (this.warningMsg == 'Please select 1 blue ball. ') {
           this.warningMsg = this.warningMsg.slice(0,-2)
           this.warningMsg += ' and 6 blue balls'
         } else {
@@ -233,12 +222,12 @@ export default {
       // 在彩民选择数字合法的情况下，读取彩民投注的数字
       if (this.invalid === false) {
         this.pending = true
-        betNumbers.push(this.selectedRedBall)
-        this.selectedBlueBalls.sort((a, b) => {
+        betNumbers.push(this.selectedBlueBall)
+        this.selectedRedBalls.sort((a, b) => {
           return a - b
         })
         for (var i = 0; i < 6; i++) {
-          betNumbers.push(this.selectedBlueBalls[i])
+          betNumbers.push(this.selectedRedBalls[i])
         }
         console.log(betNumbers)
         this.$store.state.currentUnionLotto().bet(betNumbers, {
@@ -376,8 +365,8 @@ export default {
                   console.log('push')
                   bets.push({
                     no: i/8 + 1,
-                    red: numbers[0],
-                    blues: numbers.splice(1,6),
+                    blue: numbers[0],
+                    reds: numbers.splice(1,6),
                     count: tempCount,
                     level: level
                   })
