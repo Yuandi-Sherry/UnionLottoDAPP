@@ -9,7 +9,7 @@
     <div v-if='authority' id="managePart">
       <div class="warning">{{ warning }} </div>
       <input type="date" v-model="date" placeholder="2019-01-01">
-      <button @click="publishNewUnionLotto" class="button">PUBLISH A NEW UNION LOTTO</button>
+      <button @click="publishNewUnionLotto" class="button">ISSUE A NEW UNION LOTTO</button>
       <button @click="draw" class="button">DRAW THE LAST UNION LOTTO</button>
       <button @click="testDraw" class="button">TEST DRAWING</button>
     </div>

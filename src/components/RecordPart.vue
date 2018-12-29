@@ -3,9 +3,9 @@
   <div class="body">
     <div class="result" >
         <p>{{ announcedMsg}}</p>
-        <div class=red>{{ getWinningRed }}</div>
-        <div class="blue" v-for="blue in winningBlues">
-          <div >{{ blue }}</div>
+        <div class=blue>{{ getWinningBlue }}</div>
+        <div class="red" v-for="red in winningReds">
+          <div >{{ red }}</div>
       </div>
     </div>
     <div class="dateContainer">
@@ -21,13 +21,13 @@
       <p v-if="!hasBet">You haven't bet anything. </p>
     </div>
     <table v-if="hasBet">
-      <th>Red Ball</th>
-      <th>Blue Balls</th>
+      <th>Blue Ball</th>
+      <th>Red Balls</th>
       <th># of bets</th>
       <th v-if="displayResult">Level of Prize</th>
       <tr v-for="bet in bets">
-          <td><div :class="{red: bet.red == getWinningRed, ball: bet.red != getWinningRed}">{{ bet.red }}</div> </td>
-          <td><div :class="{blue: winningBlues.indexOf(blue+'')!= -1, ball: winningBlues.indexOf(blue + '') === -1}" v-for="blue in bet.blues" @click="test">{{ blue }}</div></td>
+          <td><div :class="{blue: bet.blue == getWinningBlue, ball: bet.blue != getWinningBlue}">{{ bet.blue }}</div> </td>
+          <td><div :class="{red: winningReds.indexOf(red+'')!= -1, ball: winningReds.indexOf(red + '') === -1}" v-for="red in bet.reds" @click="test">{{ red }}</div></td>
           <td>{{ bet.count }}</td>
           <td v-if="displayResult">{{ bet.level }}</td>
       </tr>
@@ -43,8 +43,8 @@ export default {
   	return {
   	  bets: [],
       hasBet: true,
-      winningRed:-1,
-      winningBlues:[],
+      winningBlue:-1,
+      winningReds:[],
       pending: true,
       displayResult: true,
       announcedMsg: "",
@@ -53,8 +53,8 @@ export default {
   	}
   },
   computed: {
-    getWinningRed () {
-      return this.winningRed
+    getWinningBlue () {
+      return this.winningBlue
     },
     getHasBet() {
       return this.hasBet
@@ -99,7 +99,7 @@ export default {
             // console.log('tempNumbers')
             // console.log(tempNumbers)
             var level = 0;
-            (function (bets, result, contract, coinbase, numbers, i, pending) {
+            (function (bets, result, contract, coinbase, numbers, i, pending, tempCount) {
               contract.checkPriceLevel(numbers,{
                 gas: 300000,
                 from: coinbase
@@ -120,14 +120,14 @@ export default {
                   console.log('push')
                   bets.push({
                     no: i/8 + 1,
-                    red: numbers[0],
-                    blues: numbers.splice(1,6),
+                    blue: numbers[0],
+                    reds: numbers.splice(1,6),
                     count: tempCount,
                     level: level
                   })
                 }
               })
-            })(this.bets, result, this.$store.state.currentUnionLotto(),this.$store.state.web3.coinbase, tempNumbers, i, this.pending);
+            })(this.bets, result, this.$store.state.currentUnionLotto(),this.$store.state.web3.coinbase, tempNumbers, i, this.pending, tempCount);
           }
           this.hasBet = true
         }
@@ -143,19 +143,19 @@ export default {
           console.log(result)
           if(JSON.stringify(result) == '["0","0","0","0","0","0","0"]') {
             console.log("haven't drawn")
-            this.winningRed = JSON.stringify(result).slice(1,-1).split(',')[0].slice(1,-1)
+            this.winningBlue = JSON.stringify(result).slice(1,-1).split(',')[0].slice(1,-1)
             for(var i = 1; i < 7; i++) {
-              this.winningBlues.push(JSON.stringify(result).slice(1,-1).split(',')[i].slice(1,-1))
+              this.winningReds.push(JSON.stringify(result).slice(1,-1).split(',')[i].slice(1,-1))
             }
             this.announcedMsg = "This lottery haven't been annouced yet."
-            this.winningRed = "?"
-            this.winningBlues = ["?", "?", "?", "?", "?", "?"]
+            this.winningBlue = "?"
+            this.winningReds = ["?", "?", "?", "?", "?", "?"]
             this.hasResult = true
           } else {
-            this.winningBlues = []
-            this.winningRed = JSON.stringify(result).slice(1,-1).split(',')[0].slice(1,-1)
+            this.winningReds = []
+            this.winningBlue = JSON.stringify(result).slice(1,-1).split(',')[0].slice(1,-1)
             for(var i = 1; i < 7; i++) {
-              this.winningBlues.push(JSON.stringify(result).slice(1,-1).split(',')[i].slice(1,-1))
+              this.winningReds.push(JSON.stringify(result).slice(1,-1).split(',')[i].slice(1,-1))
             }
             this.announcedMsg = "The result of thie lottery is: "
             this.hasResult = true
@@ -198,7 +198,7 @@ export default {
   },
   methods: {
     test (event) {
-      console.log(this.winningBlues.indexOf(event.target.innerHTML))
+      console.log(this.winningReds.indexOf(event.target.innerHTML))
     },
     getWinnerNumbers(event) {
       this.$store.state.currentUnionLotto().getWinnerNumbers({
@@ -211,19 +211,19 @@ export default {
           console.log(result)
           if(JSON.stringify(result) == '["0","0","0","0","0","0","0"]') {
             console.log("haven't drawn")
-            this.winningRed = JSON.stringify(result).slice(1,-1).split(',')[0].slice(1,-1)
+            this.winningBlue = JSON.stringify(result).slice(1,-1).split(',')[0].slice(1,-1)
             for(var i = 1; i < 7; i++) {
-              this.winningBlues.push(JSON.stringify(result).slice(1,-1).split(',')[i].slice(1,-1))
+              this.winningReds.push(JSON.stringify(result).slice(1,-1).split(',')[i].slice(1,-1))
             }
             this.announcedMsg = "This lottery haven't been annouced yet."
-            this.winningRed = "?"
-            this.winningBlues = ["?", "?", "?", "?", "?", "?"]
+            this.winningBlue = "?"
+            this.winningReds = ["?", "?", "?", "?", "?", "?"]
             this.hasResult = true
           } else {
-            this.winningBlues = []
-            this.winningRed = JSON.stringify(result).slice(1,-1).split(',')[0].slice(1,-1)
+            this.winningReds = []
+            this.winningBlue = JSON.stringify(result).slice(1,-1).split(',')[0].slice(1,-1)
             for(var i = 1; i < 7; i++) {
-              this.winningBlues.push(JSON.stringify(result).slice(1,-1).split(',')[i].slice(1,-1))
+              this.winningReds.push(JSON.stringify(result).slice(1,-1).split(',')[i].slice(1,-1))
             }
             this.announcedMsg = "The result of thie lottery is: "
             this.hasResult = true
@@ -270,7 +270,7 @@ export default {
                 // console.log('tempNumbers')
                 // console.log(tempNumbers)
                 var level = 0;
-                (function (bets, result, contract, coinbase, numbers, i, pending) {
+                (function (bets, result, contract, coinbase, numbers, i, pending, tempCount) {
                   contract.checkPriceLevel(numbers,{
                     gas: 300000,
                     from: coinbase
@@ -290,14 +290,14 @@ export default {
                       console.log('push')
                       bets.push({
                         no: i/8 + 1,
-                        red: numbers[0],
-                        blues: numbers.splice(1,6),
+                        blue: numbers[0],
+                        reds: numbers.splice(1,6),
                         count: tempCount,
                         level: level
                       })
                     }
                   })
-                })(this.bets, result, this.$store.state.currentUnionLotto(),this.$store.state.web3.coinbase, tempNumbers, i, this.pending);
+                })(this.bets, result, this.$store.state.currentUnionLotto(),this.$store.state.web3.coinbase, tempNumbers, i, this.pending, tempCount);
               }
               this.hasBet = true
             }
@@ -313,19 +313,19 @@ export default {
               console.log(result)
               if(JSON.stringify(result) == '["0","0","0","0","0","0","0"]') {
                 console.log("haven't drawn")
-                this.winningRed = JSON.stringify(result).slice(1,-1).split(',')[0].slice(1,-1)
+                this.winningBlue = JSON.stringify(result).slice(1,-1).split(',')[0].slice(1,-1)
                 for(var i = 1; i < 7; i++) {
-                  this.winningBlues.push(JSON.stringify(result).slice(1,-1).split(',')[i].slice(1,-1))
+                  this.winningReds.push(JSON.stringify(result).slice(1,-1).split(',')[i].slice(1,-1))
                 }
                 this.announcedMsg = "This lottery haven't been annouced yet."
-                this.winningRed = "?"
-                this.winningBlues = ["?", "?", "?", "?", "?", "?"]
+                this.winningBlue = "?"
+                this.winningReds = ["?", "?", "?", "?", "?", "?"]
                 this.hasResult = true
               } else {
-                this.winningBlues = []
-                this.winningRed = JSON.stringify(result).slice(1,-1).split(',')[0].slice(1,-1)
+                this.winningReds = []
+                this.winningBlue = JSON.stringify(result).slice(1,-1).split(',')[0].slice(1,-1)
                 for(var i = 1; i < 7; i++) {
-                  this.winningBlues.push(JSON.stringify(result).slice(1,-1).split(',')[i].slice(1,-1))
+                  this.winningReds.push(JSON.stringify(result).slice(1,-1).split(',')[i].slice(1,-1))
                 }
                 this.announcedMsg = "The result of thie lottery is: "
                 this.hasResult = true
@@ -349,7 +349,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
 }
-.red, .blue, .ball {
+.blue, .red, .ball {
   display: inline-block;
   border-radius: 50%;
   color: white;

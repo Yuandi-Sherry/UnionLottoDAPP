@@ -21,7 +21,7 @@ let pollWeb3 = function (state) {
               } else {
                 store.dispatch('pollWeb3', {
                   coinbase: newCoinbase,
-                  balance: parseInt(newBalance, 10)
+                  balance: parseInt(newBalance, 10)/1000000000000000000
                 })
               }
             })
