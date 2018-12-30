@@ -1,7 +1,6 @@
 pragma solidity ^0.4.22;
 pragma experimental ABIEncoderV2;
 contract SenoirAuthority {
-    // uint count;
     address authority;
     mapping(string=>address) UnionLottos;
     string [] dates;
@@ -12,8 +11,6 @@ contract SenoirAuthority {
     function createUnionLotto(string date) public {
        dates.push(date);
        UnionLottos[date] = new UnionLotto(date);
-    //   require(, "There isn't enough ether in this contract")
-    //   UnionLottos[date].transfer(msg.value);
     }
     
     function getLottos() constant public returns (string []) {
@@ -28,9 +25,6 @@ contract SenoirAuthority {
         return UnionLottos[date];
     }
     
-    function () payable public {
-         revert();
-    }
     
     function isAuthority() constant returns (bool) {
         return authority == msg.sender;
