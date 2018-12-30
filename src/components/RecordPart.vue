@@ -4,19 +4,17 @@
     <div class="result" >
         <p>{{ announcedMsg}}</p>
         <div class=blue>{{ getWinningBlue }}</div>
-        <div class="red" v-for="red in winningReds">
+        <div :key="red" class="red" v-for="red in winningReds">
           <div >{{ red }}</div>
       </div>
     </div>
     <div class="dateContainer">
       <p>Recent Lottos</p>
-      <div  v-for="lottos in allUnionLottos">
+      <div :key='lottos' v-for="lottos in allUnionLottos">
        <p @click="changeLottos" :class="{'allLottos': lottos != currentLotto, 'chosen': lottos == currentLotto}">{{ lottos }}</p>
       </div>
     </div>
     <br>
-    
-    
     <div v-if="!hasBet" class="hasntBet">
       <p v-if="!hasBet">You haven't bet anything. </p>
     </div>
@@ -25,47 +23,43 @@
       <th>Red Balls</th>
       <th># of bets</th>
       <th v-if="displayResult">Level of Prize</th>
-      <tr v-for="bet in bets">
-          <td><div :class="{blue: bet.blue == getWinningBlue, ball: bet.blue != getWinningBlue}">{{ bet.blue }}</div> </td>
-          <td><div :class="{red: winningReds.indexOf(red+'')!= -1, ball: winningReds.indexOf(red + '') === -1}" v-for="red in bet.reds" @click="test">{{ red }}</div></td>
-          <td>{{ bet.count }}</td>
-          <td v-if="displayResult">{{ bet.level }}</td>
+      <tr  :key="bet" v-for="bet in bets">
+        <td><div :class="{blue: bet.blue == getWinningBlue, ball: bet.blue != getWinningBlue}">{{ bet.blue }}</div> </td>
+        <td><div :key="red" :class="{red: winningReds.indexOf(red+'')!= -1, ball: winningReds.indexOf(red + '') === -1}" v-for="red in bet.reds" @click="test">{{ red }}</div></td>
+        <td>{{ bet.count }}</td>
+        <td v-if="displayResult">{{ bet.level }}</td>
       </tr>
     </table>
   </div>
-  
 </template>
 <script>
 export default {
   inject: ['reload'],
   name: 'RecordPart',
-  data() {
-  	return {
-  	  bets: [],
+  data () {
+    return {
+      bets: [ ],
       hasBet: true,
-      winningBlue:-1,
-      winningReds:[],
+      winningBlue: -1,
+      winningReds: [],
       pending: true,
       displayResult: true,
-      announcedMsg: "",
-      allUnionLottos: [],
+      announcedMsg: '',
+      allUnionLottos: [ ],
       currentLotto: ''
-  	}
+    }
   },
   computed: {
     getWinningBlue () {
       return this.winningBlue
     },
-    getHasBet() {
+    getHasBet () {
       return this.hasBet
-    },
-    getWinningNumbers() {
-
     }
   },
-  mounted() {
-  	console.log('------debug3--------- ' + this.$store.state.recordPageName)
-    this.$store.dispatch('getUnionLotto', {name: this.$store.state.recordPageName}).then(response=> {
+  mounted () {
+    console.log('------debug3--------- ' + this.$store.state.recordPageName)
+    this.$store.dispatch('getUnionLotto', {name: this.$store.state.recordPageName}).then(response => {
       this.currentLotto = this.$store.state.recordPageName
       // 获得此人投注本期彩票的所有记录
       this.$store.state.currentUnionLotto().getResult({
@@ -73,61 +67,57 @@ export default {
         from: this.$store.state.web3.coinbase
       }, (err, result) => {
         if (err) {
-          // console.log('error in getResult')
-          // console.log(err)
           this.pending = false
         } else {
           // 获得账户投注的所有彩票
           console.log('获得账户投注的所有彩票')
           console.log(result)
           // console.log(JSON.getJSONArray(result))
-          var temp = JSON.stringify(result).slice(1,-1).split(',')
+          var temp = JSON.stringify(result).slice(1, -1).split(',')
           // console.log(temp)
           // console.log(temp.length)
-          if(temp.length === 1){
+          if (temp.length === 1) {
             this.hasBet = false
             this.pending = false
             return
           }
-          for(var i = 0; i < temp.length; i += 8) {
+          for (var i = 0; i < temp.length; i += 8) {
             var tempNumbers = []
             var tempCount = 0
-            for(var j = 0; j < 7; j++) {
-              tempNumbers.push(parseInt(temp[i+j].slice(1,-1)))
+            for (var j = 0; j < 7; j++) {
+              tempNumbers.push(parseInt(temp[i + j].slice(1, -1)))
             }
-            var tempCount = parseInt(temp[i+7].slice(1,-1))
+            tempCount = parseInt(temp[i + 7].slice(1, -1))
             // console.log('tempNumbers')
             // console.log(tempNumbers)
             var level = 0;
             (function (bets, result, contract, coinbase, numbers, i, pending, tempCount) {
-              contract.checkPriceLevel(numbers,{
+              contract.checkPriceLevel(numbers, {
                 gas: 300000,
                 from: coinbase
               }, (err, result) => {
-                if(err) {
-                  console.log(e)
+                if (err) {
+                  console.log(err)
                 } else {
                   pending = false
-                  // console.log('checkPriceLevel')
-
-                  console.log(numbers)
-                  // console.log(JSON.stringify(result).slice(1,-1))
-                  level = JSON.stringify(result).slice(1,-1)
-                  if(level == '0')
-                    level = "TO BE EXPECTED"
-                  if(level == '7')
-                    level = "NONE"
+                  level = JSON.stringify(result).slice(1, -1)
+                  if (level === '0') {
+                    level = 'TO BE EXPECTED'
+                  }
+                  if (level === '7') {
+                    level = 'NONE'
+                  }
                   console.log('push')
                   bets.push({
-                    no: i/8 + 1,
+                    no: i / 8 + 1,
                     blue: numbers[0],
-                    reds: numbers.splice(1,6),
+                    reds: numbers.splice(1, 6),
                     count: tempCount,
                     level: level
                   })
                 }
               })
-            })(this.bets, result, this.$store.state.currentUnionLotto(),this.$store.state.web3.coinbase, tempNumbers, i, this.pending, tempCount);
+            })(this.bets, result, this.$store.state.currentUnionLotto(), this.$store.state.web3.coinbase, tempNumbers, i, this.pending, tempCount)
           }
           this.hasBet = true
         }
@@ -137,27 +127,27 @@ export default {
         gas: 300000,
         from: this.$store.state.web3.coinbase
       }, (err, result) => {
-        if(err) {
+        if (err) {
           console.log(err)
         } else {
           console.log(result)
-          if(JSON.stringify(result) == '["0","0","0","0","0","0","0"]') {
+          if (JSON.stringify(result) === '["0","0","0","0","0","0","0"]') {
             console.log("haven't drawn")
-            this.winningBlue = JSON.stringify(result).slice(1,-1).split(',')[0].slice(1,-1)
-            for(var i = 1; i < 7; i++) {
-              this.winningReds.push(JSON.stringify(result).slice(1,-1).split(',')[i].slice(1,-1))
+            this.winningBlue = JSON.stringify(result).slice(1, -1).split(',')[0].slice(1, -1)
+            for (var i = 1; i < 7; i++) {
+              this.winningReds.push(JSON.stringify(result).slice(1, -1).split(',')[i].slice(1, -1))
             }
-            this.announcedMsg = "This lottery haven't been annouced yet."
-            this.winningBlue = "?"
-            this.winningReds = ["?", "?", "?", "?", "?", "?"]
+            this.announcedMsg = 'This lottery haven\'t been annouced yet.'
+            this.winningBlue = '?'
+            this.winningReds = ['?', '?', '?', '?', '?', '?']
             this.hasResult = true
           } else {
             this.winningReds = []
-            this.winningBlue = JSON.stringify(result).slice(1,-1).split(',')[0].slice(1,-1)
-            for(var i = 1; i < 7; i++) {
-              this.winningReds.push(JSON.stringify(result).slice(1,-1).split(',')[i].slice(1,-1))
+            this.winningBlue = JSON.stringify(result).slice(1, -1).split(',')[0].slice(1, -1)
+            for (var j = 1; j < 7; j++) {
+              this.winningReds.push(JSON.stringify(result).slice(1, -1).split(',')[j].slice(1, -1))
             }
-            this.announcedMsg = "The result of thie lottery is: "
+            this.announcedMsg = 'The result of thie lottery is: '
             this.hasResult = true
           }
         }
@@ -167,77 +157,72 @@ export default {
         gas: 300000,
         from: this.$store.state.web3.coinbase
       }, (err, result) => {
-        if(err) {
+        if (err) {
           console.log(err)
         } else {
           console.log('获得目前为止的所有彩票')
           console.log(result)
-          for(var i = 1; i < result.length; i++) {
+          for (var i = 1; i < result.length; i++) {
             this.allUnionLottos.push(result[i])
           }
           this.$store.state.SeniorAuthority().getLatest({
             gas: 300000,
             from: this.$store.state.web3.coinbase
           }, (err, result) => {
-            if(err) {
+            if (err) {
               console.log(err)
             } else {
               console.log('获得最后一个彩票的日期')
               console.log(result)
-              this.allUnionLottos.push(result);
+              this.allUnionLottos.push(result)
             }
           })
-
         }
       })
-      
-      
-    }).catch(response=>{ 
-       console.log(response)
-    })   
+    }).catch(response => {
+      console.log(response)
+    })
   },
   methods: {
     test (event) {
       console.log(this.winningReds.indexOf(event.target.innerHTML))
     },
-    getWinnerNumbers(event) {
+    getWinnerNumbers (event) {
       this.$store.state.currentUnionLotto().getWinnerNumbers({
         gas: 300000,
         from: this.$store.state.web3.coinbase
       }, (err, result) => {
-        if(err) {
+        if (err) {
           console.log(err)
         } else {
           console.log(result)
-          if(JSON.stringify(result) == '["0","0","0","0","0","0","0"]') {
+          if (JSON.stringify(result) === '["0","0","0","0","0","0","0"]') {
             console.log("haven't drawn")
-            this.winningBlue = JSON.stringify(result).slice(1,-1).split(',')[0].slice(1,-1)
-            for(var i = 1; i < 7; i++) {
-              this.winningReds.push(JSON.stringify(result).slice(1,-1).split(',')[i].slice(1,-1))
+            this.winningBlue = JSON.stringify(result).slice(1, -1).split(',')[0].slice(1, -1)
+            for (var i = 1; i < 7; i++) {
+              this.winningReds.push(JSON.stringify(result).slice(1, -1).split(',')[i].slice(1, -1))
             }
-            this.announcedMsg = "This lottery haven't been annouced yet."
-            this.winningBlue = "?"
-            this.winningReds = ["?", "?", "?", "?", "?", "?"]
+            this.announcedMsg = 'This lottery haven\'t been annouced yet.'
+            this.winningBlue = '?'
+            this.winningReds = ['?', '?', '?', '?', '?', '?']
             this.hasResult = true
           } else {
             this.winningReds = []
-            this.winningBlue = JSON.stringify(result).slice(1,-1).split(',')[0].slice(1,-1)
-            for(var i = 1; i < 7; i++) {
-              this.winningReds.push(JSON.stringify(result).slice(1,-1).split(',')[i].slice(1,-1))
+            this.winningBlue = JSON.stringify(result).slice(1, -1).split(',')[0].slice(1, -1)
+            for (var j = 1; j < 7; j++) {
+              this.winningReds.push(JSON.stringify(result).slice(1, -1).split(',')[j].slice(1, -1))
             }
-            this.announcedMsg = "The result of thie lottery is: "
+            this.announcedMsg = 'The result of thie lottery is: '
             this.hasResult = true
           }
-          
-          
         }
       })
     },
-    changeLottos(event) {
-      this.$store.dispatch('changeRecordPage', event.target.innerHTML).then(result=> {
+    changeLottos (event) {
+      this.$store.dispatch('changeRecordPage', event.target.innerHTML).then(result => {
         this.currentLotto = event.target.innerHTML
         // console.log("then of changeRecordPage in recordPart")
-        this.$store.dispatch('getUnionLotto', {name: this.$store.state.recordPageName}).then(response=> {
+        this.$store.dispatch('getUnionLotto', {name: this.$store.state.recordPageName}).then(response => {
           this.$store.state.currentUnionLotto().getResult({
             gas: 300000,
             from: this.$store.state.web3.coinbase
@@ -252,52 +237,54 @@ export default {
               console.log('获得账户投注的所有彩票')
               console.log(result)
               // console.log(JSON.getJSONArray(result))
-              var temp = JSON.stringify(result).slice(1,-1).split(',')
+              var temp = JSON.stringify(result).slice(1, -1).split(',')
               // console.log(temp)
               // console.log(temp.length)
-              if(temp.length === 1){
+              if (temp.length === 1) {
                 this.hasBet = false
                 this.pending = false
                 return
               }
-              for(var i = 0; i < temp.length; i += 8) {
+              for (var i = 0; i < temp.length; i += 8) {
                 var tempNumbers = []
                 var tempCount = 0
-                for(var j = 0; j < 7; j++) {
-                  tempNumbers.push(parseInt(temp[i+j].slice(1,-1)))
+                for (var j = 0; j < 7; j++) {
+                  tempNumbers.push(parseInt(temp[i + j].slice(1, -1)))
                 }
-                var tempCount = parseInt(temp[i+7].slice(1,-1))
+                tempCount = parseInt(temp[i + 7].slice(1, -1))
                 // console.log('tempNumbers')
                 // console.log(tempNumbers)
                 var level = 0;
                 (function (bets, result, contract, coinbase, numbers, i, pending, tempCount) {
-                  contract.checkPriceLevel(numbers,{
+                  contract.checkPriceLevel(numbers, {
                     gas: 300000,
                     from: coinbase
                   }, (err, result) => {
-                    if(err) {
-                      console.log(e)
+                    if (err) {
+                      console.log(err)
                     } else {
                       pending = false
                       // console.log('checkPriceLevel')
                       // console.log(numbers)
-                      // console.log(JSON.stringify(result).slice(1,-1))
-                      level = JSON.stringify(result).slice(1,-1)
-                      if(level == 0)
-                        level = "TO BE EXPECTED"
-                      if(level == 7)
-                        level = "NONE"
+                      // console.log(JSON.stringify(result).slice(1, -1))
+                      level = JSON.stringify(result).slice(1, -1)
+                      if (level === 0) {
+                        level = 'TO BE EXPECTED'
+                      }
+                      if (level === 7) {
+                        level = 'NONE'
+                      }
                       console.log('push')
                       bets.push({
-                        no: i/8 + 1,
+                        no: i / 8 + 1,
                         blue: numbers[0],
-                        reds: numbers.splice(1,6),
+                        reds: numbers.splice(1, 6),
                         count: tempCount,
                         level: level
                       })
                     }
                   })
-                })(this.bets, result, this.$store.state.currentUnionLotto(),this.$store.state.web3.coinbase, tempNumbers, i, this.pending, tempCount);
+                })(this.bets, result, this.$store.state.currentUnionLotto(), this.$store.state.web3.coinbase, tempNumbers, i, this.pending, tempCount)
               }
               this.hasBet = true
             }
@@ -307,37 +294,35 @@ export default {
             gas: 300000,
             from: this.$store.state.web3.coinbase
           }, (err, result) => {
-            if(err) {
+            if (err) {
               console.log(err)
             } else {
               console.log(result)
-              if(JSON.stringify(result) == '["0","0","0","0","0","0","0"]') {
+              if (JSON.stringify(result) === '["0","0","0","0","0","0","0"]') {
                 console.log("haven't drawn")
-                this.winningBlue = JSON.stringify(result).slice(1,-1).split(',')[0].slice(1,-1)
-                for(var i = 1; i < 7; i++) {
-                  this.winningReds.push(JSON.stringify(result).slice(1,-1).split(',')[i].slice(1,-1))
+                this.winningBlue = JSON.stringify(result).slice(1, -1).split(',')[0].slice(1, -1)
+                for (var i = 1; i < 7; i++) {
+                  this.winningReds.push(JSON.stringify(result).slice(1, -1).split(',')[i].slice(1, -1))
                 }
                 this.announcedMsg = "This lottery haven't been annouced yet."
-                this.winningBlue = "?"
-                this.winningReds = ["?", "?", "?", "?", "?", "?"]
+                this.winningBlue = '?'
+                this.winningReds = ['?', '?', '?', '?', '?', '?']
                 this.hasResult = true
               } else {
                 this.winningReds = []
-                this.winningBlue = JSON.stringify(result).slice(1,-1).split(',')[0].slice(1,-1)
-                for(var i = 1; i < 7; i++) {
-                  this.winningReds.push(JSON.stringify(result).slice(1,-1).split(',')[i].slice(1,-1))
+                this.winningBlue = JSON.stringify(result).slice(1, -1).split(',')[0].slice(1, -1)
+                for (var j = 1; j < 7; j++) {
+                  this.winningReds.push(JSON.stringify(result).slice(1, -1).split(',')[j].slice(1, -1))
                 }
-                this.announcedMsg = "The result of thie lottery is: "
+                this.announcedMsg = 'The result of thie lottery is: '
                 this.hasResult = true
               }
             }
           })
-        }).catch(response=>{ 
-           console.log(response)
-        })   
+        }).catch(response => {
+          console.log(response)
+        })
       })
-
-
     }
   }
 }
@@ -345,7 +330,7 @@ export default {
 </script>
 <style scoped>
 .body {
-	color: white;
+  color: white;
   margin-left: auto;
   margin-right: auto;
 }
@@ -359,7 +344,6 @@ export default {
   vertical-align: baseline;
   margin: 10px;
   line-height: 30px;
-  
 }
 .ball {
   background-color: #3A3A57;

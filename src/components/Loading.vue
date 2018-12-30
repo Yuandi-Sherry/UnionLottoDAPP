@@ -12,8 +12,6 @@ export default {
 
 </script>
 <style scoped>
-
-
 #loading-wrapper {
   position: absolute;
   width: 100%;

@@ -1,9 +1,9 @@
 <template>
   <div class='body'>
     <p>This Union Lotto will be annouced on {{LottoName}}</p>
-    <div class="blueBallPart">
+    <div class='blueBallPart'>
       <p>Choose 1 blue ball</p>
-      <div :key="ball" v-for="ball in blueBalls">
+      <div :key='ball' v-for="ball in blueBalls">
         <div :class="{'selectedBlueBall': ball == selectedBlueBall, 'blueBallStyle': ball != selectedBlueBall}"  @click="selectBlueBall">{{ball}}</div>
       </div>
     </div>
@@ -81,19 +81,19 @@
   transition: 0.2s;
 }
 .blueBallPart p, .redBallPart p {
-	min-height: 20px;
-	max-height: 20px;
+  min-height: 20px;
+  max-height: 20px;
 }
 /*for buttons*/
 .betButton,.drawButton {
   width: 50px;
-	border-style: none;
-	border-radius: 5px;
-	font-size: 10pt;
+  border-style: none;
+  border-radius: 5px;
+  font-size: 10pt;
   outline-style: none;
-	color: white;
-	padding: 5px;
-	/*background-color: #6a5ff1;*/
+  color: white;
+  padding: 5px;
+  /*background-color: #6a5ff1;*/
   background: linear-gradient(to right, #1090F8, #6451F0);
   font-family: 'Montserrat';
   /*right: 0px;*/
@@ -155,26 +155,22 @@ export default {
     this.LottoName = this.$store.state.unionLottoName
     console.log('dispatching setCurrentUnionLotto')
     console.log(this.$store.state.SeniorAuthority)
-    this.$store.dispatch('getUnionLotto', {name:this.$store.state.unionLottoName,}).then(response=>{
-      console.log("当前彩票" + this.$store.state.currentUnionLotto())
+    this.$store.dispatch('getUnionLotto', {name: this.$store.state.unionLottoName}).then(response => {
+      console.log('当前彩票' + this.$store.state.currentUnionLotto())
       this.$store.state.currentUnionLotto().isAuthority({
-          gas: 300000,
-          from: this.$store.state.web3.coinbase
-        }, (err, result) => {
-          if (err) {
-            if (err.indexOf(' User denied transaction signature.') !== -1) {
-              this.invalid = true
-              this.warningMsg = 'You\'ve denied transaction signature.'
-            }
-            console.log('error in betting')
-            console.log(err)
-            this.pending = false
-          } else {
-            // this.authority = JSON.stringify(result) == "false" ? false : true
-            // console.log("isAuthority")
-            // console.log(this.authority )
+        gas: 300000,
+        from: this.$store.state.web3.coinbase
+      }, (err, result) => {
+        if (err) {
+          if (err.indexOf(' User denied transaction signature.') !== -1) {
+            this.invalid = true
+            this.warningMsg = 'You\'ve denied transaction signature.'
           }
-        })
+          console.log('error in betting')
+          console.log(err)
+          this.pending = false
+        }
+      })
     })
   },
   methods: {
@@ -199,7 +195,6 @@ export default {
       }
     },
     bet (event) {
-      
       // 判断彩民选择的数字合法
       this.warningMsg = ''
       this.invalid = false
@@ -211,8 +206,8 @@ export default {
       }
       if (this.selectedRedBalls.length !== 6) {
         console.log('没有选择足够的蓝球')
-        if (this.warningMsg == 'Please select 1 blue ball. ') {
-          this.warningMsg = this.warningMsg.slice(0,-2)
+        if (this.warningMsg === 'Please select 1 blue ball. ') {
+          this.warningMsg = this.warningMsg.slice(0, -2)
           this.warningMsg += ' and 6 blue balls'
         } else {
           this.warningMsg += 'Please select 6 blue balls. '
@@ -249,7 +244,7 @@ export default {
             this.pending = false
           }
         })
-      }      
+      }
     },
     getUsers (event) {
       this.$store.state.currentUnionLotto().getUsers({
@@ -295,93 +290,10 @@ export default {
           console.log(JSON.stringify(result))
         }
       })
-    },
-    getResult(event) {
-      console.log("当前账户为")
-      console.log(this.$store.state.web3.coinbase)
-      this.$store.state.currentUnionLotto().getResult({
-        gas: 3000000000000000000,
-        from: this.$store.state.web3.coinbase
-      }, (err, result) => {
-        if (err) {
-          console.log('error in getResult')
-          console.log(err)
-          this.pending = false
-        } else {
-          // 获得账户投注的所有彩票
-          console.log('获得账户投注的所有彩票')
-          console.log(result)
-          // console.log(JSON.getJSONArray(result))
-          var temp = JSON.stringify(result).slice(1,-1).split(',')
-          // console.log(temp)
-          // console.log(temp.length)
-          if(temp.length === 1){
-            this.hasBet = false
-            this.pending = false
-            return
-          }
-          for(var i = 0; i < temp.length; i += 8) {
-            var tempNumbers = []
-            var tempCount = 0
-            for(var j = 0; j < 7; j++) {
-              tempNumbers.push(parseInt(temp[i+j].slice(1,-1)))
-            }
-            var tempCount = parseInt(temp[i+7].slice(1,-1))
-            // console.log('tempNumbers')
-            // console.log(tempNumbers)
-            var level = 0;
-            (function (bets, result, contract, coinbase, numbers, i, pending) {
-              contract.checkPriceLevel(numbers,{
-                gas: 300000,
-                from: coinbase
-              }, (err, result) => {
-                if(err) {
-                  console.log(e)
-                } else {
-                  pending = false
-                  // console.log('checkPriceLevel')
-                  // console.log(numbers)
-                  // console.log(JSON.stringify(result).slice(1,-1))
-                  level = JSON.stringify(result).slice(1,-1)
-                  if(level == 0)
-                    level = "TO BE EXPECTED"
-                  if(level == 0)
-                    level = "NONE"
-                  console.log('push')
-                  bets.push({
-                    no: i/8 + 1,
-                    blue: numbers[0],
-                    reds: numbers.splice(1,6),
-                    count: tempCount,
-                    level: level
-                  })
-                }
-              })
-            })(this.bets, result, this.$store.state.currentUnionLotto(),this.$store.state.web3.coinbase, tempNumbers, i, this.pending);
-          }
-        }
-      })
-    },
-    test(event) {
-      this.$store.state.currentUnionLotto().test({
-        gas: 3000000,
-        from: this.$store.state.web3.coinbase
-      }, (err, result) => {
-        if (err) {
-          console.log('error in getResult')
-          console.log(err)
-          this.pending = false
-        } else {
-          // 获得账户投注的所有彩票
-          console.log('获得账户投注的所有彩票总数')
-          console.log( JSON.stringify(result))
-         
-        }
-      })
     }
   },
   components: {
-    "loadingPart": LoadingPart
+    'loadingPart': LoadingPart
   }
 }
 </script>

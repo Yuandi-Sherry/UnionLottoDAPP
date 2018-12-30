@@ -1,14 +1,6 @@
 <template>
  <div class="body">
   <p v-if="!web3.isInjected">Please log in Metamask at first</p>
-<!--   <div>
-    <p class="title">Metamask:</p>
-    <p class="content"> {{ web3.isInjected }}</p>
-  </div>
-  <div>
-    <p class="title">Network:</p>
-    <p class="content"> {{ web3.networkId }}</p>
-  </div>  -->
   <div>
     <p class="title">Account:</p>
     <p class="content"> {{ web3.coinbase }}</p>
@@ -57,7 +49,6 @@ export default {
 }
 .body div p {
   word-wrap: break-word;
-  
   /*line-height: 15pt;*/
 }
 .title {
@@ -70,6 +61,4 @@ export default {
   vertical-align: center;
   margin-top: -10px;
 }
-
-
 </style>

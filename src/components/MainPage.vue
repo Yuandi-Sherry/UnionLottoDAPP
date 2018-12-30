@@ -13,9 +13,7 @@
       <button @click="draw" class="button">DRAW THE LAST UNION LOTTO</button>
       <button @click="testDraw" class="button">TEST DRAWING</button>
     </div>
-    
   </div>
-
 </template>
 <script>
 import HelloMetamask from '@/components/MetaMask'
@@ -41,18 +39,18 @@ export default {
         path: '/result'
       })
     },
-    publishNewUnionLotto(event) {
-      if(this.date == null) {
+    publishNewUnionLotto (event) {
+      if (this.date == null) {
         // 未输入日期
-        this.warning = "Please input the lottery date of the Union Lotto to be published"
-        console.log("请输入日期")
+        this.warning = 'Please input the lottery date of the Union Lotto to be published'
+        console.log('请输入日期')
       } else {
         // 检查上次是否开奖
         // 已有日期
-        if(this.$store.state.unionLottoName !== "") {
+        if (this.$store.state.unionLottoName !== '') {
           // 判断本次日期大于上次
-          if(this.date <= this.$store.state.unionLottoName) {
-            this.warning = "The date should be after the date of last Union Lotto"
+          if (this.date <= this.$store.state.unionLottoName) {
+            this.warning = 'The date should be after the date of last Union Lotto'
             return
           }
           // 判断上一个智能合约是否已经开奖
@@ -60,11 +58,11 @@ export default {
             gas: 300000,
             from: this.$store.state.web3.coinbase
           }, (err, result) => {
-            if(err) {
+            if (err) {
               console.log(err)
             } else {
-              if(result == true) {
-                this.warning = "Please draw the last Union Lotto before publishing a new one"
+              if (result === true) {
+                this.warning = 'Please draw the last Union Lotto before publishing a new one'
               } else {
                 this.$store.dispatch('publishUnionLotto', {name: this.date, value: this.value})
               }
@@ -81,10 +79,10 @@ export default {
         gas: 300000,
         from: this.$store.state.web3.coinbase
       }, (err, result) => {
-        if(err) {
+        if (err) {
           console.log(err)
         } else {
-          if(result == true) {
+          if (result === true) {
             this.$store.state.currentUnionLotto().draw({
               gas: 3000000,
               from: this.$store.state.web3.coinbase
@@ -94,26 +92,25 @@ export default {
                 console.log(err)
                 this.pending = false
               } else {
-
                 console.log('drew successfully')
               }
             })
           } else {
-            this.warning = "This lotto is already drawn"
+            this.warning = 'This lotto is already drawn'
           }
         }
       })
     },
-    testDraw(event) {
+    testDraw (event) {
       this.$store.state.currentUnionLotto().getState({
         gas: 300000,
         from: this.$store.state.web3.coinbase
       }, (err, result) => {
-        if(err) {
+        if (err) {
           console.log(err)
         } else {
-          if(result == true) {
-            this.$store.state.currentUnionLotto().testDraw([1,2,3,4,5,6,7],{
+          if (result === true) {
+            this.$store.state.currentUnionLotto().testDraw([1, 2, 3, 4, 5, 6, 7], {
               gas: 3000000,
               from: this.$store.state.web3.coinbase
             }, (err, result) => {
@@ -126,17 +123,17 @@ export default {
               }
             })
           } else {
-            this.warning = "This lotto is already drawn"
+            this.warning = 'This lotto is already drawn'
           }
         }
       })
     }
   },
   computed: {
-    getMetaMaskState() {
+    getMetaMaskState () {
       return this.$store.state.web3.coinbase
     }
-  }, 
+  },
   created () {
     this.$store.dispatch('registerWeb3')
     this.$store.dispatch('getSeniorAuthority').then(result => {
@@ -148,11 +145,12 @@ export default {
           console.log('error in methods created in MainPage.vue')
           this.pending = false
         } else {
-          this.authority = JSON.stringify(result) == 'true' ? true : false
+          this.authority = JSON.stringify(result) === 'true'
           console.log('------- isAuthority')
-          console.log(this.authority)
+          console.log( this.$store.state.web3.coinbase,)
+          console.log(result)
         }
-      })      
+      })
     })
   },
   components: {

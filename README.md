@@ -1,4 +1,4 @@
-# **Block** Chain Final Project
+# **Block** Chain Final Project - A Union Lotto DAPP
 
 This is a demo simulating union lotto (双色球), a type of **welfare lottery** with 1 chosen blue ball and 6 chosen red balls, in real life. It aims to solve the problem of automatically computing the price of each level prize, transferring prize to the winners,  the individual income tax to tax authorities and part of income to the charity.
 
@@ -219,7 +219,7 @@ If a buyer wants to buy the same set of numbers for more than 1 note, he can mod
 
 As in the following example, the buyer wants to buy 4 notes, and he is charged 8 ETH. 
 
-<img src=".\imgs\EightEther.png" width="800">
+<img src=".\imgs\eightEther.png" width="800">
 
 #### Result Page
 
@@ -368,9 +368,7 @@ Notes again that this 1000 notes aim to contribute the money to the prize pool.
 
 #### The robustness of buying procedure
 
-// 填写错误
-
-
+<img src=".\imgs\betwarning.png" width="600">
 
 ### Draw the lottery
 

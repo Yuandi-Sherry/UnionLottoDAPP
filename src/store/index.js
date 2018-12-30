@@ -4,8 +4,8 @@ import state from './state'
 import getWeb3 from '../util/getWeb3'
 import pollWeb3 from '../util/pollWeb3'
 import getSeniorAuthority from '../util/getSeniorAuthority'
-import getUnionLotto from '../util/getUnionLotto'
 import {ABI} from '../util/constants/UnionLotto'
+import Web3 from 'web3'
 
 Vue.use(Vuex)
 export const store = new Vuex.Store({
@@ -19,12 +19,11 @@ export const store = new Vuex.Store({
       web3Copy.networkId = result.networkId
       web3Copy.coinbase = result.coinbase
       web3Copy.balance = result.balance
-      console.log("-------------------- payload.balance ------------------" + payload.balance)
-      console.log("-------------------- web3Copy.balance ------------------" + web3Copy.balance)
+      console.log('-------------------- payload.balance ------------------' + payload.balance)
+      console.log('-------------------- web3Copy.balance ------------------' + web3Copy.balance)
       web3Copy.web3Instance = result.web3
       state.web3 = web3Copy
       pollWeb3()
-      
     },
     pollWeb3Instance (state, payload) {
       // console.log('pollWeb3Instance mutation being executed', payload)
@@ -36,17 +35,17 @@ export const store = new Vuex.Store({
       state.SeniorAuthority = () => payload
     },
     // 发布一个彩票
-    registerUnionLotto(state, payload) {
+    registerUnionLotto (state, payload) {
       state.unionLottoName = payload.name
       state.recordPageName = payload.name
     },
-    setCurrentLotto(state, payload) {
+    setCurrentLotto (state, payload) {
       state.currentUnionLotto = () => payload
     },
-    setRecordPageName(state, payload) {
+    setRecordPageName (state, payload) {
       state.recordPageName = payload
     },
-    setUnionName(state, payload) {
+    setUnionName (state, payload) {
       state.unionLottoName = payload
     }
   },
@@ -69,30 +68,40 @@ export const store = new Vuex.Store({
           from: state.web3.coinbase,
           gas: 3000000
         }, (err, result) => {
-          if (result.length === 0) {
-            console.log("[WARNING] There isn't any deployed UnionLotto Contract")
-          } else if(result.length === 1) {
-            // 显示出现问题
-            console.log("[WARNING] There's only one deployed UnionLotto Contract")
-            state.SeniorAuthority().getLatest({
-              from: state.web3.coinbase,
-              gas: 3000000
-            }, (err, result) => {
-              if(state.unionLottoName === '')
-                commit('setUnionName', result)
-              if(state.recordPageName === '')
-                commit('setRecordPageName', result)
-            })
+          if (err) {
+            console.log(err)
           } else {
-            console.log("[WARNING] There're 2 one deployed UnionLotto Contract")
-            if(state.unionLottoName === '')
-              commit('setUnionName', result[result.length-1])
-            if(state.recordPageName === '')
-              commit('setRecordPageName', result[result.length - 1])
+            if (result.length === 0) {
+              console.log('[WARNING] There isn\'t any deployed UnionLotto Contract')
+            } else if (result.length === 1) {
+              // 显示出现问题
+              console.log('[WARNING] There\'s only one deployed UnionLotto Contract')
+              state.SeniorAuthority().getLatest({
+                from: state.web3.coinbase,
+                gas: 3000000
+              }, (err, result) => {
+                if (err) {
+                  console.log(err)
+                } else {
+                  if (state.unionLottoName === '') {
+                    commit('setUnionName', result)
+                  }
+                  if (state.recordPageName === '') {
+                    commit('setRecordPageName', result)
+                  }
+                }
+              })
+            } else {
+              console.log('[WARNING] There\'re 2 one deployed UnionLotto Contract')
+              if (state.unionLottoName === '') {
+                commit('setUnionName', result[result.length - 1])
+              }
+              if (state.recordPageName === '') {
+                commit('setRecordPageName', result[result.length - 1])
+              }
+            }
           }
-
         })
-        // resolve('next')
       }).catch(e => {
         console.log('---- error in getSeniorAuthority ----')
         console.log(e)
@@ -101,8 +110,8 @@ export const store = new Vuex.Store({
     publishUnionLotto ({commit}, payload) {
       // console.log(state.web3.coinbase)
       return new Promise(function (resolve, reject) {
-        var UnionLottoAddress = null
-        // console.log("payload.name sent to createUnionLotto" + payload.name)
+        // var UnionLottoAddress = null
+        // console.log('payload.name sent to createUnionLotto' + payload.name)
         state.SeniorAuthority().createUnionLotto(payload.name, {
           gas: 3000000,
           from: state.web3.coinbase
@@ -113,11 +122,11 @@ export const store = new Vuex.Store({
           } else {
             commit('registerUnionLotto', {name: payload.name, contract: result})
           }
-        })      
+        })
       }).catch(e => console.log(e))
     },
-    getUnionLotto({commit}, payload) {
-      if(state.SeniorAuthority == null) {
+    getUnionLotto ({commit}, payload) {
+      if (state.SeniorAuthority == null) {
         console.log('---- The senior authority is not assigned ----')
       } else {
         // set current Lotto
@@ -129,7 +138,7 @@ export const store = new Vuex.Store({
           }, (err, result) => {
             if (err) {
               console.log('---- error in getUnionLotto ----')
-              console.log(e)
+              console.log(err)
             } else {
               // get the address of current lotto and deploy
               console.log('---- CURRENT LOTTO ADDRESS ----')
@@ -143,12 +152,12 @@ export const store = new Vuex.Store({
             }
           })
         }).catch(e => {
-          console.log("---- error in getUnionLotto Promise ----")
+          console.log('---- error in getUnionLotto Promise ----')
           console.log(e)
         })
       }
     },
-    changeRecordPage({commit}, payload) {
+    changeRecordPage ({commit}, payload) {
       return new Promise(function (resolve, reject) {
         commit('setRecordPageName', payload)
         resolve()
